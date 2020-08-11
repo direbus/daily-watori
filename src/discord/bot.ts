@@ -4,23 +4,23 @@ import {
   CommandMessage,
   CommandNotFound,
 } from '@typeit/discord';
-import Twitter from 'twitter-lite';
 
 @Discord('!')
 export abstract class DallyDoseBot {
-  constructor(private readonly twitterClient: Twitter) {}
-
   /**
    * Add a new relevant Twitter account
    */
-  @Command('watch')
-  private watch = async (message: CommandMessage) => {
-    const twitterUsername = message.commandContent;
+  @Command('watch :username')
+  private watch(message: CommandMessage) {
+    const { username } = message.args;
 
-    if (twitterUsername.length === 0) {
-      // I can't find the username dumbass!
+    if (!username) {
+      return message.reply('There\'s no username, dumbass!');
     }
 
+    return message.reply(`The twitter handle is ${username}`);
+
+    /*
     const account = await this.twitterClient.get(
       'users/lookup',
       { screen_name: twitterUsername },
@@ -31,12 +31,13 @@ export abstract class DallyDoseBot {
     } else {
       // it doesn't exist!
     }
+    */
   }
 
   /**
    * Remove a Twitter account from watch list
    */
-  @Command('unwatch')
+  @Command('unwatch :username')
   private unwatch(message: CommandMessage) {
     const twitterUsername = message.commandContent;
 

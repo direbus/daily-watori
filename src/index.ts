@@ -12,11 +12,15 @@ import { config } from 'dotenv';
 
   const client = new Client({
     classes: [
-      `${__dirname}/discord/client.ts`,
-      `${__dirname}/discord/client.js`,
+      `${__dirname}/discord/bot.ts`,
+      `${__dirname}/discord/bot.js`,
     ],
     variablesChar: ':',
   });
 
   await client.login(process.env.DISCORD_TOKEN);
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Discord bot successfully connected');
+  }
 })();
