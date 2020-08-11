@@ -3,7 +3,6 @@ import {
   Command,
   CommandMessage,
   CommandNotFound,
-  On,
 } from '@typeit/discord';
 import Twitter from 'twitter-lite';
 
@@ -46,15 +45,10 @@ export abstract class DallyDoseBot {
     }
   }
 
-  @On('messageReactionAdd')
-  private approveTweet(message: CommandMessage) {
-    
-  }
-
   @CommandNotFound()
   private notFound(message: CommandMessage) {
     // reply with not found thingy
-    message.reply('...');
+    return message.reply('Fuck you');
   }
 }
 

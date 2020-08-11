@@ -4,10 +4,10 @@ import Twitter from 'twitter-lite';
 
 if (process.env.NODE_ENV === 'development') {
   config();
+}
 
-  if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
-    throw new Error('Twitter tokens has not been set');
-  }
+if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
+  throw new Error('Twitter tokens has not been set');
 }
 
 const client = new Twitter({
@@ -17,6 +17,7 @@ const client = new Twitter({
   access_token_secret: process.env.TWITTER_SECRET,
 });
 
+// test
 const users = [
   'aidairo2009',
 ];
