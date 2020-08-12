@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:bot": "nodemon src/index.ts",
-    "dev:fetch-tweets": "npx cross-env NODE_ENV='development' ts-node scripts/fetch-tweets.ts"
+    "dev:fetch-tweets": "npx cross-env NODE_ENV='development' ts-node scripts/fetch-tweets.ts",
+    "postuninstall": "npm prune"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,6 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@typeit/discord": "^4.0.8",
     "aws-sdk": "^2.720.0",
     "discord.js": "^12.2.0",
     "twitter-lite": "^0.14.0"

@@ -1,50 +1,62 @@
-import {
-  Discord,
-  Command,
-  CommandMessage,
-  CommandNotFound,
-} from '@typeit/discord';
+import { Client, Collection, Message } from 'discord.js';
+import { TwitterService } from '../service/twitter';
+import { prefix } from './../../bot.config.json';
+import { readdirSync } from 'fs';
 
-@Discord('!')
-export abstract class DallyDoseBot {
-  /**
-   * Add a new relevant Twitter account
-   */
-  @Command('watch :username')
-  private watch(message: CommandMessage) {
-    const { username } = message.args;
+interface CommandHandler {
+  name: string,
+  description: string,
+  simple: boolean,
 
-    if (!username) {
-      return message.reply('There\'s no username, dumbass!');
-    }
-
-    return message.reply(`The twitter handle is ${username}`);
-
-    /*
-    if (account.length > 0) {
-      // save to db
-    } else {
-      // it doesn't exist!
-    }
-    */
-  }
-
-  /**
-   * Remove a Twitter account from watch list
-   */
-  @Command('unwatch :username')
-  private unwatch(message: CommandMessage) {
-    const twitterUsername = message.commandContent;
-
-    if (twitterUsername.length === 0) {
-      // I can't find the username dumbass!
-    }
-  }
-
-  @CommandNotFound()
-  private notFound(message: CommandMessage) {
-    // reply with not found thingy
-    return message.reply('Fuck you');
-  }
+  execute(message: Message): Promise<Message>;
+  execute(message: Message, args: string[], service: TwitterService): Promise<Message>;
 }
 
+export class DallyDoseBot {
+  private readonly commands: Collection<string, CommandHandler>;
+
+  constructor(
+    private readonly discordClient: Client,
+    private readonly twitterService: TwitterService,
+  ) {
+    this.commands = new Collection();
+
+    const commandFiles = readdirSync(`${__dirname}/commands`);
+    commandFiles.forEach((file: string): void => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const importFile = require(`${__dirname}/commands/${file}`);
+      const commandHandler: CommandHandler = importFile.default;
+
+      this.commands.set(commandHandler.name, commandHandler);
+    });
+
+    this.addCommandListeners();
+  }
+
+  private addCommandListeners = () => {
+    this.discordClient.addListener('message', (message: Message) => {
+      if (message.author.bot || !message.content.startsWith(prefix)) {
+        return;
+      }
+
+      const args = message.content.slice(prefix.length).split(/ +/);
+      const commandName = (args.shift() as string).toLowerCase();
+
+      const commandHandler = this.commands.get(commandName);
+
+      if (commandHandler) {
+        return commandHandler.simple ?
+          commandHandler.execute(message) :
+          commandHandler.execute(message, args, this.twitterService);
+      } else {
+        return message.reply('IDK wtf are you smoking lol');
+      }
+    });
+  }
+
+  public start = async (token: string): Promise<boolean> => {
+    const usedToken = await this.discordClient.login(token);
+
+    return usedToken === token;
+  }
+}
