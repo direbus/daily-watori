@@ -21,11 +21,6 @@ export abstract class DallyDoseBot {
     return message.reply(`The twitter handle is ${username}`);
 
     /*
-    const account = await this.twitterClient.get(
-      'users/lookup',
-      { screen_name: twitterUsername },
-    );
-
     if (account.length > 0) {
       // save to db
     } else {
