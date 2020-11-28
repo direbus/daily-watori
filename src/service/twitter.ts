@@ -1,7 +1,7 @@
 import Twitter from 'twitter-lite';
 
 import { Status, FullUser, MediaEntity } from 'twitter-d';
-import { Tweet } from './../model/twitter';
+import { Image, Tweet } from '../entity/tweet';
 
 /**
  * A class that provides services to interact with Twitter API
@@ -51,17 +51,24 @@ export class TwitterService {
       return hasImage && (timespan <= TwitterService.ONE_DAY);
     });
 
-    // re-map the result to custom interface
+    // re-map the result to entity
     return relevantStatuses.map((status: Status): Tweet => {
       const user = status.user as FullUser;
       const images = status.entities.media as MediaEntity[];
 
-      return {
-        id: status['id_str'],
-        author: user.screen_name,
-        images: images.map(photo => photo.media_url_https),
-        fetchedAt: new Date(),
-      };
+      const imageEntities: Image[] = images.map((photo): Image => {
+        const entity = new Image();
+        entity.link = photo.media_url_https;
+
+        return entity;
+      });
+
+      const tweetEntity = new Tweet();
+      tweetEntity.tweetId = status['id_str'];
+      tweetEntity.author = user.screen_name;
+      tweetEntity.images = imageEntities;
+
+      return tweetEntity;
     });
   }
 

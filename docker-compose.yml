@@ -1,23 +1,26 @@
-version: "3.8"
+version: "3.7"
 
 services:
   bot:
-    build: ./vote
+    build: .
     command: npm run dev:bot
     depends_on: 
       - "postgres"
 
   fetch:
-    build: ./scripts/fetch
+    build: .
     command: npm run dev:fetch-tweets
     depends_on: 
       - "postgres"
 
   postgres:
     image: postgres:alpine
-    environment:
-      - POSTGRES_USER: postgres
-      - POSTGRES_PASSWORD: 
-      - POSTGRES_DB: dally-dose
     volumes: 
       - "db-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=dally-dose
+
+volumes: 
+  db-data:
