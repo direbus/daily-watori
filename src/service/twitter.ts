@@ -32,13 +32,13 @@ export class TwitterService {
    *
    * A tweet is considered to be fresh if it is posted within timespan of a day.
    *
-   * @param {string[]} source List of user of interest's username
+   * @param {User[]} sources List of user of interests' username
    * @return {Promise<Tweet[]>} Array of relevant tweets
    */
-  public getRelevantTweets = async (source: string[]): Promise<Tweet[]> => {
+  public getRelevantTweets = async (sources: string[]): Promise<Tweet[]> => {
     const { statuses } = await this.twitterClient.get(
       'search/tweets',
-      { q: `${this.buildFromQuery(source)} filter:images` },
+      { q: `${this.buildFromQuery(sources)} filter:images` },
     );
 
     const relevantStatuses = statuses.filter((status: Status) => {
@@ -71,7 +71,6 @@ export class TwitterService {
       tweetEntity.tweetId = status['id_str'];
       tweetEntity.author = userEntity;
       tweetEntity.images = imageEntities;
-      tweetEntity.urgent = false;
       tweetEntity.hasRetweeted = false;
 
       return tweetEntity;

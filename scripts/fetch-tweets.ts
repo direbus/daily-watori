@@ -3,15 +3,11 @@ import { TwitterService } from './../src/service/twitter';
 import Twitter from 'twitter-lite';
 import { Tweet } from '../src/entity/tweet';
 import { createConnection } from 'typeorm';
+import { User } from './../src/entity/user';
+import { TweetRepository } from '../src/repository/tweet';
+import { UserRepository } from '../src/repository/user';
 
-async function getUsersOfInterest(): Promise<string[]> {
-  const dbConnection = await createConnection();
-  const users = await 
-
-  return users; // just return dummy data for now
-}
-
-async function fetchTweets(source: string[]): Promise<Tweet[]> {
+async function fetchFreshTweets(users: User[]): Promise<Tweet[]> {
   if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
     throw new Error('Twitter tokens has not been set');
   }
@@ -23,7 +19,9 @@ async function fetchTweets(source: string[]): Promise<Tweet[]> {
     access_token_secret: process.env.TWITTER_SECRET,
   });
 
-  return new TwitterService(client).getRelevantTweets(source);
+  const sources = users.map(user => user.name);
+
+  return new TwitterService(client).getRelevantTweets(sources);
 }
 
 (async function() {
@@ -31,13 +29,22 @@ async function fetchTweets(source: string[]): Promise<Tweet[]> {
     config();
   }
 
-  const usersOfInterest = await getUsersOfInterest();
+  const dbConnection = await createConnection();
+  const tweetRepo = dbConnection.getCustomRepository(TweetRepository);
+  const userRepo = dbConnection.getCustomRepository(UserRepository);
 
-  const tweets = await fetchTweets(usersOfInterest);
+  const usersOfInterest = await userRepo.getUsersOfInterest();
+
+  const tweets = await fetchFreshTweets(usersOfInterest);
 
   if (process.env.NODE_ENV === 'development') {
     console.log(tweets);
   }
 
   // save to DB
+  try {
+    await tweetRepo.insertFreshTweets(tweets);
+  } catch (err) {
+    throw new Error(`Failed to save tweets to database. Reason: ${err.message}`);
+  }
 })();

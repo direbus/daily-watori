@@ -6,9 +6,9 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, unique: true })
   name: string;
 
   @OneToMany(() => Tweet, user => user.author)
-  tweets: Tweet[];
+  tweets: Promise<Tweet[]>;
 }
