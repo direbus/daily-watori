@@ -2,6 +2,7 @@ import Twitter from 'twitter-lite';
 
 import { Status, FullUser, MediaEntity } from 'twitter-d';
 import { Image, Tweet } from '../entity/tweet';
+import { User } from '../entity/user';
 
 /**
  * A class that provides services to interact with Twitter API
@@ -63,9 +64,12 @@ export class TwitterService {
         return entity;
       });
 
+      const userEntity = new User();
+      userEntity.name = user.screen_name;
+
       const tweetEntity = new Tweet();
       tweetEntity.tweetId = status['id_str'];
-      tweetEntity.author = user.screen_name;
+      tweetEntity.author = userEntity;
       tweetEntity.images = imageEntities;
       tweetEntity.urgent = false;
       tweetEntity.hasRetweeted = false;

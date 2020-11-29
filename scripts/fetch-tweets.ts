@@ -1,12 +1,12 @@
 import { config } from 'dotenv';
 import { TwitterService } from './../src/service/twitter';
 import Twitter from 'twitter-lite';
-import { Tweet } from '../src/model/twitter';
+import { Tweet } from '../src/entity/tweet';
+import { createConnection } from 'typeorm';
 
 async function getUsersOfInterest(): Promise<string[]> {
-  const users = [
-    'aidairo2009',
-  ];
+  const dbConnection = await createConnection();
+  const users = await 
 
   return users; // just return dummy data for now
 }

@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user';
 
 @Entity()
 export class Image {
@@ -23,8 +24,8 @@ export class Tweet {
   @OneToMany(() => Image, image => image.tweet)
   images: Image[];
 
-  @Column({ nullable: false })
-  author: string;
+  @ManyToOne(() => User, author => author.tweets)
+  author: User;
 
   @CreateDateColumn()
   fetchedAt: Date;
