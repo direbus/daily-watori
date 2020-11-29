@@ -31,4 +31,10 @@ export class Tweet {
 
   @Column({ nullable: true })
   approvedAt?: Date;
+
+  @Column({ nullable: false })
+  urgent: boolean;
+
+  @Column({ nullable: false })
+  hasRetweeted: boolean;
 }

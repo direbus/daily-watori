@@ -67,6 +67,8 @@ export class TwitterService {
       tweetEntity.tweetId = status['id_str'];
       tweetEntity.author = user.screen_name;
       tweetEntity.images = imageEntities;
+      tweetEntity.urgent = false;
+      tweetEntity.hasRetweeted = false;
 
       return tweetEntity;
     });
