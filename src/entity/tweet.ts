@@ -12,9 +12,6 @@ export class Tweet {
   @Column({ nullable: false })
   url: string;
 
-  @Column({ nullable: false })
-  images: string[];
-
   @ManyToOne(() => User, author => author.tweets, { nullable: false })
   author: User;
 

@@ -1,6 +1,6 @@
 import Twitter from 'twitter-lite';
 
-import { Status, FullUser, MediaEntity } from 'twitter-d';
+import { Status, FullUser } from 'twitter-d';
 import { Tweet } from '../entity/tweet';
 import { User } from '../entity/user';
 
@@ -67,8 +67,6 @@ export class TwitterService {
     // re-map the result to entity
     return relevantStatuses.map((status: Status): Tweet => {
       const user = status.user as FullUser;
-      const images = status.entities.media as MediaEntity[];
-      const imageUrls = images.map(photo => photo.media_url_https);
 
       const userEntity = new User();
       userEntity.name = user.screen_name;
@@ -77,7 +75,6 @@ export class TwitterService {
       tweetEntity.tweetId = status['id_str'];
       tweetEntity.url = this.buildTwitterLink(user.screen_name, status['id_str']);
       tweetEntity.author = userEntity;
-      tweetEntity.images = imageUrls;
       tweetEntity.hasRetweeted = false;
 
       return tweetEntity;
