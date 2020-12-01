@@ -1,7 +1,7 @@
 import Twitter from 'twitter-lite';
 
 import { Status, FullUser, MediaEntity } from 'twitter-d';
-import { Image, Tweet } from '../entity/tweet';
+import { Tweet } from '../entity/tweet';
 import { User } from '../entity/user';
 
 /**
@@ -23,6 +23,18 @@ export class TwitterService {
    */
   private buildFromQuery = (source: string[]): string => {
     return source.map(src => `from:${src}`).join(' OR ');
+  }
+
+  /**
+   * A utility function to build Twitter status link
+   * by exploiting twitter hashbang bug
+   *
+   * @param {string} id Tweet ID
+   * @param {string} name User's screen name
+   * @return {string} Twitter status link
+   */
+  private buildTwitterLink = (id: string, user: string): string => {
+    return `https://twitter.com/${user}/status/${id}`;
   }
 
   /**
@@ -56,21 +68,16 @@ export class TwitterService {
     return relevantStatuses.map((status: Status): Tweet => {
       const user = status.user as FullUser;
       const images = status.entities.media as MediaEntity[];
-
-      const imageEntities: Image[] = images.map((photo): Image => {
-        const entity = new Image();
-        entity.link = photo.media_url_https;
-
-        return entity;
-      });
+      const imageUrls = images.map(photo => photo.media_url_https);
 
       const userEntity = new User();
       userEntity.name = user.screen_name;
 
       const tweetEntity = new Tweet();
       tweetEntity.tweetId = status['id_str'];
+      tweetEntity.url = this.buildTwitterLink(user.screen_name, status['id_str']);
       tweetEntity.author = userEntity;
-      tweetEntity.images = imageEntities;
+      tweetEntity.images = imageUrls;
       tweetEntity.hasRetweeted = false;
 
       return tweetEntity;
