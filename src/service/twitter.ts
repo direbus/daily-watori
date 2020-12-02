@@ -73,7 +73,7 @@ export class TwitterService {
 
       const tweetEntity = new Tweet();
       tweetEntity.tweetId = status['id_str'];
-      tweetEntity.url = this.buildTwitterLink(user.screen_name, status['id_str']);
+      tweetEntity.url = this.buildTwitterLink(user.name, status['id_str']);
       tweetEntity.author = userEntity;
       tweetEntity.hasRetweeted = false;
 
@@ -104,7 +104,7 @@ export class TwitterService {
   public isUserExist = async (username: string): Promise<boolean> => {
     const account = await this.twitterClient.get(
       'users/lookup',
-      { screen_name: username },
+      { name: username },
     );
 
     return account.length > 0;

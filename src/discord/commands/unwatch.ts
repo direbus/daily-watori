@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import { Context } from '../../common/types';
+import { prefix } from './../../../bot.config.json';
 
 export default {
   name: 'unwatch',
@@ -7,21 +8,22 @@ export default {
   execute: async (
     message: Message,
     args: string[],
-    { twitterService, userRepository }: Context,
+    { userRepository }: Context,
   ): Promise<Message> => {
     if (!args.length) {
-      return message.reply('The username must be supplied');
+      return message.reply('The username for the intended target must be supplied');
     }
 
-    return message.reply(`The username is: ${args[0]}`);
-
-    /*
-    const userExist = await service.isUserExist(args[0]);
+    const userExist = await userRepository.isUserExist(args[0]);
 
     if (userExist) {
+      const deleteResult = await userRepository.deleteUser(args[0]);
+
+      return deleteResult ?
+        message.reply(`Successfully removed **@${args[0]}** from the watchlist`) :
+        message.reply(`Failed to remove **@${args[0]}** from the watchlist`);
     } else {
-      return message.reply('Please don\'t try to fool me with fake Twitter account');
+      return message.reply(`This user doesn't exist in the watchlist. Try adding it first using \`${prefix}watch ${args[0]}\``);
     }
-    */
   },
 };

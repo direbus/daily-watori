@@ -23,14 +23,19 @@ export class seed1606830567440 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `CREATE INDEX "tweet_hash_index"
+      `CREATE INDEX "ux_tweet_tweet_id"
       ON "tweet" USING HASH (tweet_id)`,
+    );
+
+    await queryRunner.query(
+      `CREATE INDEX "ux_user_name"
+      ON "user" USING HASH (name)`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `DROP INDEX "tweet_hash_index"`,
+      `DROP INDEX "ux_tw"`,
     );
 
     await queryRunner.query(
