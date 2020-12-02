@@ -30,7 +30,6 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "aws-sdk": "^2.720.0",
     "discord.js": "^12.2.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
