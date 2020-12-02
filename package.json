@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:bot": "nodemon src/index.ts",
     "dev:fetch-tweets": "npx cross-env NODE_ENV='development' ts-node scripts/fetch-tweets.ts",
-    "postuninstall": "npm prune"
+    "postuninstall": "npm prune",
+    "migration:up": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migration:down": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },
   "keywords": [],
   "author": "",
