@@ -24,7 +24,7 @@ export default {
       reply += `\n**${prefix}${command}** — ${description}`;
     });
 
-    reply += `\nPlease use \`${prefix}help <command_name>\` for more detailed information for the command`;
+    reply += `\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
 
     return message.reply(reply);
   },
