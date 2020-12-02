@@ -1,14 +1,13 @@
 import { Message } from 'discord.js';
-import { TwitterService } from '../../service/twitter';
+import { Context } from '../../common/types';
 
 export default {
-  name: 'watch',
-  description: 'Add a Twitter user to watchlist',
-  simple: false,
+  command: 'watch',
+  description: 'Add a Twitter user to the watchlist',
   execute: async (
     message: Message,
     args: string[],
-    service: TwitterService,
+    { twitterService, userRepository }: Context,
   ): Promise<Message> => {
     if (!args.length) {
       return message.reply('I don\'t know the Twitter username, dumbass!');

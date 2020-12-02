@@ -1,39 +1,31 @@
 import { Client, Collection, Message } from 'discord.js';
-import { TwitterService } from '../service/twitter';
 import { prefix } from './../../bot.config.json';
 import { readdirSync } from 'fs';
-
-interface CommandHandler {
-  name: string,
-  description: string,
-  simple: boolean,
-
-  execute(message: Message): Promise<Message>;
-  execute(message: Message, args: string[], service: TwitterService): Promise<Message>;
-}
+import { resolve } from 'path';
+import { CommandHandler, Context, HandlerFunction } from '../common/types';
 
 export class DallyDoseBot {
-  private readonly commands: Collection<string, CommandHandler>;
+  private readonly commands: Collection<string, HandlerFunction>;
 
   constructor(
     private readonly discordClient: Client,
-    private readonly twitterService: TwitterService,
+    private readonly context: Context,
   ) {
     this.commands = new Collection();
 
-    const commandFiles = readdirSync(`${__dirname}/commands`);
-    commandFiles.forEach((file: string): void => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const importFile = require(`${__dirname}/commands/${file}`);
-      const commandHandler: CommandHandler = importFile.default;
+    const commandFiles = readdirSync(resolve(__dirname, 'commands'));
+    commandFiles.forEach(async (file: string): Promise<void> => {
+      const { command, execute }: CommandHandler = await import(
+        resolve(__dirname, 'commands', file)
+      );
 
-      this.commands.set(commandHandler.name, commandHandler);
+      this.commands.set(command, execute);
     });
 
-    this.addCommandListeners();
+    this.registerListeners();
   }
 
-  private addCommandListeners = () => {
+  private registerListeners = () => {
     this.discordClient.addListener('message', (message: Message) => {
       if (message.author.bot || !message.content.startsWith(prefix)) {
         return;
@@ -42,14 +34,14 @@ export class DallyDoseBot {
       const args = message.content.slice(prefix.length).split(/ +/);
       const commandName = (args.shift() as string).toLowerCase();
 
-      const commandHandler = this.commands.get(commandName);
+      const handler = this.commands.get(commandName);
 
-      if (commandHandler) {
-        return commandHandler.simple ?
-          commandHandler.execute(message) :
-          commandHandler.execute(message, args, this.twitterService);
+      if (handler) {
+        return handler(message, args, this.context);
       } else {
-        return message.reply('IDK wtf are you smoking lol');
+        return message.reply(
+          `Command unknown, please refer to \`${prefix}help\` for more information about how to use this bot.`,
+        );
       }
     });
   }

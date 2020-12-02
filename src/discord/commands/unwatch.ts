@@ -1,14 +1,13 @@
 import { Message } from 'discord.js';
-import { TwitterService } from '../../service/twitter';
+import { Context } from '../../common/types';
 
 export default {
   name: 'unwatch',
-  description: 'Remove a Twitter user from watchlist',
-  simple: false,
+  description: 'Remove a Twitter user from the watchlist',
   execute: async (
     message: Message,
     args: string[],
-    service: TwitterService,
+    { twitterService, userRepository }: Context,
   ): Promise<Message> => {
     if (!args.length) {
       return message.reply('I don\'t know the Twitter username, dumbass!');

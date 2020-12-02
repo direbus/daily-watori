@@ -3,11 +3,18 @@ import { config } from 'dotenv';
 import { DallyDoseBot } from './discord/bot';
 import { TwitterService } from './service/twitter';
 import Twitter from 'twitter-lite';
+import { createConnection } from 'typeorm';
+import { TweetRepository } from './repository/tweet';
+import { UserRepository } from './repository/user';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
     config();
   }
+
+  const dbConn = await createConnection();
+  const tweetRepository = dbConn.getCustomRepository(TweetRepository);
+  const userRepository = dbConn.getCustomRepository(UserRepository);
 
   if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
     throw new Error('Twitter tokens has not been set');
@@ -27,14 +34,17 @@ import Twitter from 'twitter-lite';
 
   const twitterService = new TwitterService(twitterClient);
 
-  const bot = new DallyDoseBot(discordClient, twitterService);
+  const bot = new DallyDoseBot(
+    discordClient,
+    { twitterService, tweetRepository, userRepository },
+  );
 
   try {
     const feedback = await bot.start(process.env.DISCORD_TOKEN);
 
     if (process.env.NODE_ENV === 'development') {
       if (feedback) {
-        console.log('DallyDose successfully connected to Discord server');
+        console.log('DallyDose successfully connected to Discord server!');
       }
     }
   } catch (err) {
