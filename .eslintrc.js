@@ -44,7 +44,7 @@ module.exports = {
         'requireForBlockBody': true,
       },
     ],
-    'max-len': 'off', // NO
+    'max-len': 'off',
     'require-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'valid-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'new-cap': 'off', // prevent decorator issues

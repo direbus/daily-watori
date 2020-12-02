@@ -10,7 +10,7 @@ export default {
     { twitterService, userRepository }: Context,
   ): Promise<Message> => {
     if (!args.length) {
-      return message.reply('I don\'t know the Twitter username, dumbass!');
+      return message.reply('The username must be supplied');
     }
 
     return message.reply(`The username is: ${args[0]}`);
