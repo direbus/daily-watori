@@ -8,7 +8,7 @@ export default {
   execute: async (
     message: Message,
     args: string[],
-    { twitterService, userRepository }: Context,
+    { twitterRepository: twitterService, userRepository }: Context,
   ): Promise<Message> => {
     if (!args.length) {
       return message.reply('The username for the intended target must be supplied!');
@@ -23,8 +23,9 @@ export default {
         return message.reply('This username is already exist on the watchlist.');
       }
 
-      const user = new User();
-      user.name = args[0];
+      const user: User = {
+        name: args[0],
+      };
 
       const insertResult = await userRepository.addUser(user);
 

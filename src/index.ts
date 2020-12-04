@@ -1,10 +1,10 @@
 import { Client } from 'discord.js';
 import { config } from 'dotenv';
 import { DallyDoseBot } from './discord/bot';
-import { TwitterService } from './service/twitter';
+import { TwitterRepository } from './repository/twitter';
 import Twitter from 'twitter-lite';
-import { TweetRepository } from './repository/tweet';
-import { UserRepository } from './repository/user';
+import { TweetRepository } from './repository/db/tweet';
+import { UserRepository } from './repository/db/user';
 import { getDb } from './utils/db';
 
 (async function() {
@@ -32,11 +32,11 @@ import { getDb } from './utils/db';
     access_token_secret: process.env.TWITTER_SECRET,
   });
 
-  const twitterService = new TwitterService(twitterClient);
+  const twitterService = new TwitterRepository(twitterClient);
 
   const bot = new DallyDoseBot(
     discordClient,
-    { twitterService, tweetRepository, userRepository },
+    { twitterRepository: twitterService, tweetRepository, userRepository },
   );
 
   try {

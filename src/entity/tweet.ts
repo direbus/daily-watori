@@ -1,3 +1,6 @@
+/**
+ * Tweet object, as seen in database
+ */
 export interface TweetEntity {
   tweetId: string;
   author: string;
@@ -6,6 +9,11 @@ export interface TweetEntity {
   approvedAt?: Date;
 }
 
+/**
+ * Extended Tweet object with url virtuals.
+ *
+ * Has from-to entity conversion methods for convenience.
+ */
 export class Tweet {
   private constructor(
     public readonly tweetId: string,

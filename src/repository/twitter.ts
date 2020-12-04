@@ -1,16 +1,12 @@
 import Twitter from 'twitter-lite';
-
 import { Status, FullUser } from 'twitter-d';
 import { Tweet } from '../entity/tweet';
 
 /**
  * A class that provides services to interact with Twitter API
  */
-export class TwitterService {
-  // a day in milliseconds
-  private static readonly ONE_DAY = 86400000;
-
-  constructor(
+export class TwitterRepository {
+  public constructor(
     private readonly twitterClient: Twitter,
   ) {}
 
@@ -25,28 +21,19 @@ export class TwitterService {
   }
 
   /**
-   * A utility function to build Twitter status link
-   * by exploiting twitter hashbang bug
-   *
-   * @param {string} id Tweet ID
-   * @param {string} name User's screen name
-   * @return {string} Twitter status link
-   */
-  private buildTwitterLink = (id: string, user: string): string => {
-    return `https://twitter.com/${user}/status/${id}`;
-  }
-
-  /**
    * Retrieve fresh and relevant tweets from users of interest.
    *
    * A tweet is considered to be relevant if it has at least an image on it.
    *
-   * A tweet is considered to be fresh if it is posted within timespan of a day.
-   *
    * @param {User[]} sources List of user of interests' username
+   * @param {number} lifetime Tweet 'freshness', a tweet is considered to be fresh
+   * if it's posted in timespan of a day
    * @return {Promise<TweetEntity[]>} Array of relevant tweets
    */
-  public getRelevantTweets = async (sources: string[]): Promise<Tweet[]> => {
+  public getRelevantTweets = async (
+    sources: string[],
+    lifetime: number,
+  ): Promise<Tweet[]> => {
     const { statuses } = await this.twitterClient.get(
       'search/tweets',
       { q: `${this.buildFromQuery(sources)} filter:images` },
@@ -60,7 +47,7 @@ export class TwitterService {
       // this line will prevent tweets that doesn't contain photo(s) on them
       const hasImage = status.entities.media?.some(media => media.type === 'photo');
 
-      return hasImage && (timespan <= TwitterService.ONE_DAY);
+      return hasImage && (timespan <= lifetime);
     });
 
     // re-map the result to entity

@@ -11,21 +11,25 @@ export default {
     message: Message,
     args: string[], // use the args later
   ): Promise<Message> => {
-    const commandFiles = readdirSync(resolve(__dirname));
+    if (args.length === 0) {
+      const commandFiles = readdirSync(resolve(__dirname));
 
-    // add description here lol
-    let reply = 'List of available commands:\n';
+      // add description here lol
+      let reply = 'List of available commands:\n';
 
-    commandFiles.forEach(async (file: string): Promise<void> => {
-      const { command, description }: CommandHandler = await import(
-        resolve(__dirname, file)
-      );
+      commandFiles.forEach(async (file: string): Promise<void> => {
+        const { command, description }: CommandHandler = await import(
+          resolve(__dirname, file)
+        );
 
-      reply += `\n**${prefix}${command}** — ${description}`;
-    });
+        reply += `\n**${prefix}${command}** — ${description}`;
+      });
 
-    reply += `\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
+      reply += `\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
 
-    return message.reply(reply);
+      return message.reply(reply);
+    } else {
+      return message.reply('UNIMPLEMNTED');
+    }
   },
 };
