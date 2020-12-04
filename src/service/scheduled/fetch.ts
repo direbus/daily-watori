@@ -1,13 +1,13 @@
 import { config } from 'dotenv';
-import { TwitterService } from './../src/service/twitter';
 import Twitter from 'twitter-lite';
-import { TweetEntity } from '../src/entity/tweet';
-import { createConnection } from 'typeorm';
-import { User } from './../src/entity/user';
-import { TweetRepository } from '../src/repository/tweet';
-import { UserRepository } from '../src/repository/user';
+import { Tweet } from '../../entity/tweet';
+import { User } from '../../entity/user';
+import { TweetRepository } from '../../repository/tweet';
+import { UserRepository } from '../../repository/user';
+import { getDb } from '../../utils/db';
+import { TwitterService } from '../twitter';
 
-async function fetchFreshTweets(users: User[]): Promise<TweetEntity[]> {
+async function fetchFreshTweets(users: User[]): Promise<Tweet[]> {
   if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
     throw new Error('Twitter tokens has not been set');
   }
@@ -29,11 +29,11 @@ async function fetchFreshTweets(users: User[]): Promise<TweetEntity[]> {
     config();
   }
 
-  const dbConnection = await createConnection();
-  const tweetRepo = dbConnection.getCustomRepository(TweetRepository);
-  const userRepo = dbConnection.getCustomRepository(UserRepository);
+  const db = await getDb();
+  const userRepository = new UserRepository(db);
+  const tweetRepository = new TweetRepository(db);
 
-  const usersOfInterest = await userRepo.getUsersOfInterest();
+  const usersOfInterest = await userRepository.getUsersOfInterest();
 
   const tweets = await fetchFreshTweets(usersOfInterest);
 
@@ -43,7 +43,7 @@ async function fetchFreshTweets(users: User[]): Promise<TweetEntity[]> {
 
   // save to DB
   try {
-    await tweetRepo.insertFreshTweets(tweets);
+    await tweetRepository.insertFreshTweets(tweets);
   } catch (err) {
     throw new Error(`Failed to save tweets to database. Reason: ${err.message}`);
   }

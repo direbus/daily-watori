@@ -11,7 +11,7 @@
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",
     "migration:up": "ts-node node_modules/.bin/migrate-mongo up -f migrate-mongo-config.ts",
-    "migration:down": "ts-node node_modules/.bin/migrate-mongo down -f migrate-mongo-config.ts && npm run migrate:status"
+    "migration:down": "ts-node node_modules/.bin/migrate-mongo down -f migrate-mongo-config.ts && npm run migration:status"
   },
   "keywords": [],
   "author": "",

@@ -3,15 +3,16 @@ version: "3.7"
 services:
   mongo:
     image: mongo:latest
+    env_file: .env
     restart: always
     environment: 
-      - MONGO_INITDB_ROOT_DATABASE=dally-dose
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=mongodb
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
     ports: 
-      - 27017:27017
+      - "127.0.0.1:27017:27017"
     volumes:
-      - mongodb_data_container:/data/db
+      - db-data:/data/db
 
 volumes: 
-  mongodb_data_container:
+  db-data:
+    driver: local

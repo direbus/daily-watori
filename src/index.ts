@@ -5,17 +5,14 @@ import { TwitterService } from './service/twitter';
 import Twitter from 'twitter-lite';
 import { TweetRepository } from './repository/tweet';
 import { UserRepository } from './repository/user';
-import { MongoClient } from 'mongodb';
+import { getDb } from './utils/db';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
     config();
   }
 
-  const dbClient = await MongoClient.connect(
-    `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-  );
-  const db = dbClient.db();
+  const db = await getDb();
   const tweetRepository = new TweetRepository(db);
   const userRepository = new UserRepository(db);
 
