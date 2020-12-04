@@ -1,13 +1,13 @@
 import { config } from 'dotenv';
 import { TwitterService } from './../src/service/twitter';
 import Twitter from 'twitter-lite';
-import { Tweet } from '../src/entity/tweet';
+import { TweetEntity } from '../src/entity/tweet';
 import { createConnection } from 'typeorm';
 import { User } from './../src/entity/user';
 import { TweetRepository } from '../src/repository/tweet';
 import { UserRepository } from '../src/repository/user';
 
-async function fetchFreshTweets(users: User[]): Promise<Tweet[]> {
+async function fetchFreshTweets(users: User[]): Promise<TweetEntity[]> {
   if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
     throw new Error('Twitter tokens has not been set');
   }

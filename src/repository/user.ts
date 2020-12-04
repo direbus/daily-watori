@@ -1,47 +1,35 @@
-import { EntityManager, EntityRepository } from 'typeorm';
+import { Db } from 'mongodb';
 import { User } from '../entity/user';
+import { MongoRepository } from './mongo';
 
-@EntityRepository()
-export class UserRepository {
-  public constructor(private readonly manager: EntityManager) {}
+export class UserRepository extends MongoRepository<User> {
+  public constructor(db: Db) {
+    super('user', db);
+  }
 
   public getUsersOfInterest = async (): Promise<User[]> => {
-    return this.manager.connection
-      .createQueryBuilder()
-      .select('name')
-      .from(User, 'user')
-      .execute();
+    return this.collection
+      .find()
+      .toArray();
   }
 
   public addUser = async (user: User): Promise<boolean> => {
-    const result = await this.manager.connection
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values(user)
-      .execute();
+    const result = await this.collection
+      .insertOne(user);
 
-    return result.generatedMaps.length === 1;
+    return result.result.ok === 1;
   }
 
   public deleteUser = async (name: string): Promise<boolean> => {
-    const result = await this.manager.connection
-      .createQueryBuilder()
-      .delete()
-      .from(User)
-      .where('name = :name', { name })
-      .execute();
+    const result = await this.collection
+      .deleteOne({ name });
 
-    return result.affected === 1;
+    return result.result.ok === 1;
   }
 
   public isUserExist = async (name: string): Promise<boolean> => {
-    const result = await this.manager.connection
-      .createQueryBuilder()
-      .select('name')
-      .from(User, 'user')
-      .where('name = :name', { name })
-      .getCount();
+    const result = await this.collection
+      .countDocuments({ name });
 
     return result === 1;
   }

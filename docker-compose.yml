@@ -1,18 +1,17 @@
 version: "3.7"
 
 services:
-  postgres:
-    image: postgres:alpine
-    volumes: 
-      - db-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    expose:
-      - 5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=dally-dose
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment: 
+      - MONGO_INITDB_ROOT_DATABASE=dally-dose
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongodb
+    ports: 
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
 
 volumes: 
-  db-data:
+  mongodb_data_container:

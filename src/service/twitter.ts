@@ -2,7 +2,6 @@ import Twitter from 'twitter-lite';
 
 import { Status, FullUser } from 'twitter-d';
 import { Tweet } from '../entity/tweet';
-import { User } from '../entity/user';
 
 /**
  * A class that provides services to interact with Twitter API
@@ -45,7 +44,7 @@ export class TwitterService {
    * A tweet is considered to be fresh if it is posted within timespan of a day.
    *
    * @param {User[]} sources List of user of interests' username
-   * @return {Promise<Tweet[]>} Array of relevant tweets
+   * @return {Promise<TweetEntity[]>} Array of relevant tweets
    */
   public getRelevantTweets = async (sources: string[]): Promise<Tweet[]> => {
     const { statuses } = await this.twitterClient.get(
@@ -68,16 +67,12 @@ export class TwitterService {
     return relevantStatuses.map((status: Status): Tweet => {
       const user = status.user as FullUser;
 
-      const userEntity = new User();
-      userEntity.name = user.screen_name;
-
-      const tweetEntity = new Tweet();
-      tweetEntity.tweetId = status['id_str'];
-      tweetEntity.url = this.buildTwitterLink(user.screen_name, status['id_str']);
-      tweetEntity.author = userEntity;
-      tweetEntity.hasRetweeted = false;
-
-      return tweetEntity;
+      return Tweet.fromJSON({
+        tweetId: status['id_str'],
+        author: user.screen_name,
+        fetchedAt: new Date(),
+        hasRetweeted: false,
+      });
     });
   }
 

@@ -3,18 +3,21 @@ import { config } from 'dotenv';
 import { DallyDoseBot } from './discord/bot';
 import { TwitterService } from './service/twitter';
 import Twitter from 'twitter-lite';
-import { createConnection } from 'typeorm';
 import { TweetRepository } from './repository/tweet';
 import { UserRepository } from './repository/user';
+import { MongoClient } from 'mongodb';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
     config();
   }
 
-  const dbConn = await createConnection();
-  const tweetRepository = dbConn.getCustomRepository(TweetRepository);
-  const userRepository = dbConn.getCustomRepository(UserRepository);
+  const dbClient = await MongoClient.connect(
+    `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  );
+  const db = dbClient.db();
+  const tweetRepository = new TweetRepository(db);
+  const userRepository = new UserRepository(db);
 
   if (!process.env.CONSUMER_TOKEN || !process.env.CONSUMER_SECRET) {
     throw new Error('Twitter tokens has not been set');

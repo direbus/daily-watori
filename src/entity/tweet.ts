@@ -1,26 +1,37 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user';
-
-@Entity()
-export class Tweet {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ nullable: false, unique: true, name: 'tweet_id' })
+export interface TweetEntity {
   tweetId: string;
-
-  @Column({ nullable: false })
-  url: string;
-
-  @ManyToOne(() => User, author => author.tweets, { nullable: false })
-  author: User;
-
-  @CreateDateColumn({ name: 'fetched_at' })
+  author: string;
   fetchedAt: Date;
-
-  @Column({ nullable: true, name: 'approved_at' })
-  approvedAt?: Date;
-
-  @Column({ nullable: false, name: 'has_retweeted' })
   hasRetweeted: boolean;
+  approvedAt?: Date;
+}
+
+export class Tweet {
+  private constructor(
+    public readonly tweetId: string,
+    public readonly author: string,
+    public readonly fetchedAt: Date,
+    public readonly hasRetweeted: boolean,
+    public readonly approvedAt?: Date,
+  ) {}
+
+  public get url(): string {
+    return `https://twitter.com/${this.author}/status/${this.tweetId}`;
+  }
+
+  public static fromJSON(json: TweetEntity): Tweet {
+    return new Tweet(
+      json.tweetId,
+      json.author,
+      json.fetchedAt,
+      json.hasRetweeted,
+      json.approvedAt,
+    );
+  }
+
+  public toJSON(): TweetEntity {
+    return {
+      ...this,
+    };
+  }
 }
