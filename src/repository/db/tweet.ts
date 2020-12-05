@@ -17,7 +17,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
    *
    * @returns {Promise<Tweet[]>} List of approved tweets
    */
-  public getApprovedTweets = async (): Promise<Tweet[]> => {
+  public getApprovedTweets = async (limit?: number): Promise<Tweet[]> => {
     const result = await this.collection
       .find(
         {
@@ -26,6 +26,8 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
         },
       )
       .project({ tweetId: 1 })
+      .sort({ approvedAt: 1 })
+      .limit(limit && limit > 0 ? limit : 0)
       .toArray();
 
     return result.map(doc => Tweet.fromJSON(doc));
@@ -98,7 +100,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
    * @param {string} tweetId Tweet's ID
    * @returns {Promise<boolean>} A boolean which indicates if repost is commited successfully
    */
-  public repostTweet = async (tweetId: string): Promise<boolean> => {
+  public markRetweet = async (tweetId: string): Promise<boolean> => {
     const result = await this.collection
       .updateOne(
         { tweetId },

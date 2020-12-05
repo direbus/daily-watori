@@ -37,6 +37,10 @@ export class Tweet {
     );
   }
 
+  public static getIDFromURL(url: string): string {
+    return url.split('/').pop() as string;
+  }
+
   public toJSON(): TweetEntity {
     return {
       ...this,

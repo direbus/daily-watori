@@ -1,16 +1,17 @@
-import { Client, Collection, Guild, Message, TextChannel } from 'discord.js';
+import { Client, Collection, Guild, Message, MessageReaction, TextChannel, User } from 'discord.js';
 import { format } from 'date-fns';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import { prefix, channelName } from './../../bot.config.json';
-import { CommandHandler, Context, HandlerFunction } from '../common/types';
+import { CommandHandler, Context, HandlerFunction, RETWEET } from '../common/types';
 import { Tweet } from '../entity/tweet';
 
 export class DallyDoseBot {
   private readonly commands: Collection<string, HandlerFunction>;
+  private readonly guilds: Collection<string, Guild>;
 
   constructor(
-    private readonly discordClient: Client,
+    private readonly client: Client,
     private readonly context: Context,
   ) {
     this.commands = new Collection();
@@ -24,13 +25,16 @@ export class DallyDoseBot {
       this.commands.set(command, execute);
     });
 
-    this.discordClient.addListener('message', this.onMessage);
-    this.discordClient.addListener('ready', this.onReady);
+    this.guilds = client.guilds.cache;
+
+    this.client.addListener('message', this.onMessage);
+    this.client.addListener('messageReactionAdd', this.onReact);
+    this.client.addListener('ready', this.onReady);
   }
 
   private onReady = async (): Promise<void> => {
     // for each connected guild, create a text channel to manage this bot
-    this.discordClient.guilds.cache.forEach(async (guild: Guild) => {
+    this.guilds.forEach(async (guild: Guild) => {
       const channel = guild.channels.cache.find(
         channel => channel.name === channelName,
       );
@@ -42,7 +46,7 @@ export class DallyDoseBot {
       }
     });
 
-    this.discordClient.user?.setPresence({
+    this.client.user?.setPresence({
       status: 'online',
       activity: {
         type: 'CUSTOM_STATUS',
@@ -54,6 +58,10 @@ export class DallyDoseBot {
   private onMessage = async (message: Message): Promise<Message | undefined> => {
     if (message.author.bot || !message.content.startsWith(prefix)) {
       return;
+    }
+
+    if (message.partial) { // prevent partials
+      await message.fetch();
     }
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -70,6 +78,24 @@ export class DallyDoseBot {
     }
   }
 
+  private onReact = async (reaction: MessageReaction, user: User): Promise<void> => {
+    const emoji = reaction.emoji;
+    if (user.bot) { // add target emoji later
+      return;
+    }
+
+    if (reaction.partial) { // prevent partials
+      await reaction.fetch();
+    }
+
+    const url = /https:\/\/twitter.com\/\w+\/status\/(\d+)/;
+    const tweetId = (reaction.message.content.match(url) as RegExpMatchArray)[1];
+
+    // add conditions for target emoji
+
+    this.context.emitter.emit(RETWEET, tweetId);
+  }
+
   public sendFreshTweets = async (tweets: Tweet[]): Promise<void> => {
     const messageFormatter = (tweet: Tweet) => {
       return '**FRESH TWEETS**' +
@@ -83,14 +109,18 @@ export class DallyDoseBot {
         '**React to manage this tweet**';
     };
 
-    this.discordClient.guilds.cache.forEach(async (guild: Guild): Promise<void> => {
-      const channel = guild.channels.cache.find(channel => channel.name === channelName);
+    this.guilds.forEach(async (guild: Guild): Promise<void> => {
+      const channel = guild.channels.cache.find(
+        channel => channel.name === channelName,
+      );
 
       if (channel) {
         const textChannel = channel as TextChannel;
 
-        const messages = tweets.map(
-          tweet => textChannel.send(messageFormatter(tweet)),
+        const messages = await Promise.all(
+          tweets.map(
+            tweet => textChannel.send(messageFormatter(tweet)),
+          ),
         );
 
         await Promise.all(messages);
@@ -107,7 +137,7 @@ export class DallyDoseBot {
    * @returns {Promise<boolean>} A boolean whether if login commited successfully
    */
   public start = async (token: string): Promise<boolean> => {
-    const usedToken = await this.discordClient.login(token);
+    const usedToken = await this.client.login(token);
 
     return usedToken === token;
   }
