@@ -1,4 +1,7 @@
 {
   "prefix": "!",
-  "reaction": ":smile:"
+  "reaction": ":smile:",
+  "channelName": "dally-tweets",
+  "fetchSchedule": "",
+  "retweetSchedule": ""
 }

@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { Context, ONE_DAY, TWEET_INSERT } from '../common/types';
 
 /**
@@ -6,8 +5,7 @@ import { Context, ONE_DAY, TWEET_INSERT } from '../common/types';
  * fire the TWEET_INSERT event to be handled by next handler.
  */
 export async function fetchFreshTweets(
-  { userRepository, tweetRepository, twitterRepository }: Context,
-  emitter: EventEmitter,
+  { userRepository, tweetRepository, twitterRepository, emitter }: Context,
 ): Promise<void> {
   const usersOfInterest = await userRepository.getUsersOfInterest();
   const sources = usersOfInterest.map(user => user.name);

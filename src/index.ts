@@ -6,11 +6,14 @@ import Twitter from 'twitter-lite';
 import { TweetRepository } from './repository/db/tweet';
 import { UserRepository } from './repository/db/user';
 import { getDb } from './utils/db';
+import { EventEmitter } from 'events';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
     config();
   }
+
+  const emitter = new EventEmitter();
 
   const db = await getDb();
   const tweetRepository = new TweetRepository(db);
@@ -32,11 +35,11 @@ import { getDb } from './utils/db';
     access_token_secret: process.env.TWITTER_SECRET,
   });
 
-  const twitterService = new TwitterRepository(twitterClient);
+  const twitterRepository = new TwitterRepository(twitterClient);
 
   const bot = new DallyDoseBot(
     discordClient,
-    { twitterRepository: twitterService, tweetRepository, userRepository },
+    { twitterRepository, tweetRepository, userRepository, emitter },
   );
 
   try {

@@ -19,7 +19,7 @@ export default {
     };
 
     users.forEach(({ name }: User): void => {
-      reply += `\n**@${name}** — [Account](${getTwitterLink(name)})`;
+      reply += `\n**@${name}** — ${getTwitterLink(name)}`;
     });
 
     return message.reply(reply);

@@ -33,9 +33,11 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "date-fns": "^2.16.1",
     "discord.js": "^12.2.0",
     "migrate-mongo": "^8.1.4",
     "mongodb": "^3.6.3",
+    "node-cron": "^2.0.3",
     "twitter-lite": "^0.14.0"
   }
 }

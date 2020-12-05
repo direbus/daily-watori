@@ -1,4 +1,5 @@
 import { Message } from 'discord.js';
+import { EventEmitter } from 'events';
 import { TweetRepository } from '../repository/db/tweet';
 import { UserRepository } from '../repository/db/user';
 import { TwitterRepository } from '../repository/twitter';
@@ -7,6 +8,7 @@ export interface Context {
   userRepository: UserRepository;
   tweetRepository: TweetRepository;
   twitterRepository: TwitterRepository;
+  emitter: EventEmitter;
 }
 
 export interface HandlerFunction {
