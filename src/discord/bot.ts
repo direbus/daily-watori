@@ -77,8 +77,10 @@ export class DallyDoseBot {
         `Author: **@${tweet.author}**` +
         '\n' +
         `Fetched At: ${format(tweet.fetchedAt, 'D MMMM YYYY — HH:mm Z')}` +
+        '\n' +
+        `Link: ${tweet.url}` +
         '\n\n' +
-        '**React to manage this tweets**';
+        '**React to manage this tweet**';
     };
 
     this.discordClient.guilds.cache.forEach(async (guild: Guild): Promise<void> => {
