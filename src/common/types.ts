@@ -4,6 +4,7 @@ import { TweetRepository } from '../repository/db/tweet';
 import { UserRepository } from '../repository/db/user';
 import { TwitterRepository } from '../repository/twitter';
 
+// Bot context, useful for dependency injection purposes
 export interface Context {
   userRepository: UserRepository;
   tweetRepository: TweetRepository;
@@ -11,6 +12,7 @@ export interface Context {
   emitter: EventEmitter;
 }
 
+// Complete definition for command handler function
 export interface HandlerFunction {
   (message: Message, args: string[], ctx: Context): Promise<Message>;
 }

@@ -20,8 +20,5 @@ export async function getDb(): Promise<Db> {
     },
   );
 
-  console.log(dbClient);
-  console.log(dbClient.db(process.env.DB_NAME));
-
   return dbClient.db(process.env.DB_NAME);
 }

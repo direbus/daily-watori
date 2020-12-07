@@ -2,10 +2,14 @@ import { Client, Collection, Guild, Message, MessageReaction, TextChannel, User 
 import { format } from 'date-fns';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
-import { prefix, channelName } from './../../bot.config.json';
+import { prefix, channelName, react } from './../../bot.config.json';
 import { CommandHandler, Context, HandlerFunction, RETWEET } from '../common/types';
 import { Tweet } from '../entity/tweet';
 
+/**
+ * Core functionality of the bot. Allows users to interact
+ * with tweets and commands.
+ */
 export class DallyDoseBot {
   private readonly commands: Collection<string, HandlerFunction>;
   private readonly guilds: Collection<string, Guild>;
@@ -32,6 +36,9 @@ export class DallyDoseBot {
     this.client.addListener('ready', this.onReady);
   }
 
+  /**
+   * Responds when the bot is online
+   */
   private onReady = async (): Promise<void> => {
     // for each connected guild, create a text channel to manage this bot
     this.guilds.forEach(async (guild: Guild) => {
@@ -55,6 +62,9 @@ export class DallyDoseBot {
     });
   }
 
+  /**
+   * Respond when a user sends a message to the server
+   */
   private onMessage = async (message: Message): Promise<Message | undefined> => {
     if (message.author.bot || !message.content.startsWith(prefix)) {
       return;
@@ -78,24 +88,55 @@ export class DallyDoseBot {
     }
   }
 
+  /**
+   * Respond when a reaction is added on tweet notification message
+   */
   private onReact = async (reaction: MessageReaction, user: User): Promise<void> => {
-    const emoji = reaction.emoji;
-    if (user.bot) { // add target emoji later
+    const { partial, emoji, message } = reaction;
+    const { yes, no, instant } = react;
+
+    const channel = message.channel;
+
+    if (
+      reaction.message.channel.type !== 'news' ||
+      (channel as TextChannel).name !== channelName ||
+      user.bot
+    ) {
       return;
     }
 
-    if (reaction.partial) { // prevent partials
+    if (partial) { // prevent partials
       await reaction.fetch();
     }
 
     const url = /https:\/\/twitter.com\/\w+\/status\/(\d+)/;
-    const tweetId = (reaction.message.content.match(url) as RegExpMatchArray)[1];
+    const tweetId = (message.content.match(url) as RegExpMatchArray)[1];
 
-    // add conditions for target emoji
+    if (emoji.name === no) {
+      await this.context.tweetRepository.rejectTweet(
+        tweetId,
+      );
+    } else if (emoji.name === instant || emoji.name === yes) {
+      await this.context.tweetRepository.approveTweet(
+        tweetId,
+        message.createdAt,
+      );
 
-    this.context.emitter.emit(RETWEET, tweetId);
+      if (emoji.name === instant) {
+        this.context.emitter.emit(RETWEET, tweetId);
+      }
+
+      await message.react('👌');
+    }
   }
 
+  /**
+   * Send tweet notification to the news channel,
+   * allowing administrators to interact with it.
+   *
+   * @param {Tweet[]} tweets List of new relevant tweets
+   * @returns {Promise<void>} A promise that contains nothing
+   */
   public sendFreshTweets = async (tweets: Tweet[]): Promise<void> => {
     const messageFormatter = (tweet: Tweet) => {
       return '**FRESH TWEETS**' +

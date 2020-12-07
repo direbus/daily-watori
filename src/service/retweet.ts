@@ -1,25 +1,46 @@
 import { Context } from '../common/types';
-import { Tweet } from '../entity/tweet';
+import { retweetLimit } from './../../bot.config.json';
 
+/**
+ * Helper function for scheduled retweets.
+ * This function will fetch `x` oldest approved tweets
+ * from the database to be retweeted.
+ *
+ * You can configure `x` from `bot.config.json` in the root directory.
+ *
+ * @param {Context} context Bot context
+ */
+export async function scheduledRetweet(
+  context: Context,
+): Promise<void> {
+  const tweets = await context.tweetRepository
+    .getApprovedTweets(
+      retweetLimit,
+    );
+
+  const result = await Promise.allSettled(
+    tweets.map(tweet => retweet(tweet.tweetId, context)),
+  );
+
+  if (result.some(res => !res)) {
+    // log
+  }
+}
+
+/**
+ * Retweet a tweet by its ID.
+ *
+ * @param {string} tweetId Retweeted tweet's ID
+ * @param {Context} context Bot context
+ */
 export async function retweet(
-  tweets: Tweet[],
+  tweetId: string,
   { tweetRepository, twitterRepository }: Context,
 ): Promise<void> {
-  const retweetRequest = await Promise.allSettled(
-    tweets.map(
-      tweet => twitterRepository.retweet(tweet.tweetId),
-    ),
-  );
+  const retweetResult = await twitterRepository
+    .retweet(tweetId);
 
-  const successIds: string[] = [];
-
-  retweetRequest.forEach((result, index) => {
-    if (result.status) {
-      successIds.push(tweets[index].tweetId);
-    }
-  });
-
-  await Promise.all(
-    successIds.map(id => tweetRepository.markRetweet(id)),
-  );
+  if (retweetResult) {
+    await tweetRepository.markRetweet(tweetId);
+  }
 }

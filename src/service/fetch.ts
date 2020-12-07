@@ -21,5 +21,9 @@ export async function fetchFreshTweets(
 
   const insertedTweets = await tweetRepository.insertFreshTweets(freshTweets);
 
+  if (insertedTweets.length !== freshTweets.length) {
+    // log
+  }
+
   emitter.emit(TWEET_INSERT, insertedTweets);
 }

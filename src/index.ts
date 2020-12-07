@@ -1,12 +1,18 @@
+import { EventEmitter } from 'events';
 import { Client } from 'discord.js';
 import { config } from 'dotenv';
+import { schedule } from 'node-cron';
+import Twitter from 'twitter-lite';
 import { DallyDoseBot } from './discord/bot';
 import { TwitterRepository } from './repository/twitter';
-import Twitter from 'twitter-lite';
 import { TweetRepository } from './repository/db/tweet';
 import { UserRepository } from './repository/db/user';
 import { getDb } from './utils/db';
-import { EventEmitter } from 'events';
+import { fetchSchedule, retweetSchedule } from './../bot.config.json';
+import { retweet, scheduledRetweet } from './service/retweet';
+import { fetchFreshTweets } from './service/fetch';
+import { RETWEET, TWEET_INSERT } from './common/types';
+import { Tweet } from './entity/tweet';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
@@ -36,19 +42,40 @@ import { EventEmitter } from 'events';
   });
 
   const twitterRepository = new TwitterRepository(twitterClient);
+  const context = {
+    twitterRepository,
+    tweetRepository,
+    userRepository,
+    emitter,
+  };
 
-  const bot = new DallyDoseBot(
-    discordClient,
-    { twitterRepository, tweetRepository, userRepository, emitter },
-  );
+  const bot = new DallyDoseBot(discordClient, context);
+
+  emitter.on(TWEET_INSERT, async (tweets: Tweet[]) => {
+    await bot.sendFreshTweets(tweets);
+  });
+  emitter.on(RETWEET, async (tweetId: string) => {
+    await retweet(tweetId, context);
+  });
 
   try {
     const feedback = await bot.start(process.env.DISCORD_TOKEN);
 
-    if (process.env.NODE_ENV === 'development') {
-      if (feedback) {
+    if (feedback) {
+      if (process.env.NODE_ENV === 'development') {
         console.log('DallyDose successfully connected to Discord server!');
       }
+
+      // fetch fresh tweets every 24 hour
+      schedule(fetchSchedule, async () => {
+        await fetchFreshTweets(context);
+      });
+      // retweet approved tweets every 8 hour
+      schedule(retweetSchedule, async () => {
+        await scheduledRetweet(context);
+      });
+    } else {
+      throw new Error('Mismatched login token and configured token');
     }
   } catch (err) {
     if (process.env.NODE_ENV === 'development') {
