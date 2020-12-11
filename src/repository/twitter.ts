@@ -1,6 +1,7 @@
 import Twitter from 'twitter-lite';
 import { Status, FullUser } from 'twitter-d';
 import { Tweet } from '../entity/tweet';
+import { format } from 'date-fns';
 
 /**
  * A class that provides services to interact with Twitter API
@@ -11,13 +12,31 @@ export class TwitterRepository {
   ) {}
 
   /**
-   * A utility function to build Twitter's FROM query
+   * A utility function to build Twitter's search query,
+   * includes from:, filter:, and since: queries
    *
    * @param {string[]} source List of user of interest's username
+   * @param {number} lifetime Tweet 'freshness' in milliseconds, a tweet is
+   * considered to be fresh if it's posted within the provided timespan.
    * @return {string} Formatted Twitter's FROM query part
    */
-  private buildFromQuery = (source: string[]): string => {
-    return source.map(src => `from:${src}`).join(' OR ');
+  private buildQuery = (
+    source: string[],
+    lifetime: number,
+  ): string => {
+    // add sources filter
+    let query = source.map(src => `from:${src}`).join(' OR ');
+
+    // add images filter
+    query += ' AND filter:images OR filter:twimg';
+
+    // add lifetime filter
+    const sinceMillis = new Date().getTime() - lifetime;
+    const sinceDate = new Date(sinceMillis);
+
+    query += ` AND since:${format(sinceDate, 'yyyy-MM-dd')}`;
+
+    return query;
   }
 
   /**
@@ -26,8 +45,8 @@ export class TwitterRepository {
    * A tweet is considered to be relevant if it has at least an image on it.
    *
    * @param {User[]} sources List of user of interests' username
-   * @param {number} lifetime Tweet 'freshness', a tweet is considered to be fresh
-   * if it's posted in timespan of a day
+   * @param {number} lifetime Tweet 'freshness' in milliseconds, a tweet is
+   * considered to be fresh if it's posted within the provided timespan.
    * @return {Promise<TweetEntity[]>} Array of relevant tweets
    */
   public getRelevantTweets = async (
@@ -36,22 +55,11 @@ export class TwitterRepository {
   ): Promise<Tweet[]> => {
     const { statuses } = await this.twitterClient.get(
       'search/tweets',
-      { q: `${this.buildFromQuery(sources)} filter:images` },
+      { q: this.buildQuery(sources, lifetime) },
     );
 
-    const relevantStatuses = statuses.filter((status: Status) => {
-      const createdAt = new Date(status['created_at']);
-      const timespan = new Date().getTime() - createdAt.getTime();
-
-      // for some unknown reasons, the 'images' query is still inaccurate
-      // this line will prevent tweets that doesn't contain photo(s) on them
-      const hasImage = status.entities.media?.some(media => media.type === 'photo');
-
-      return hasImage && (timespan <= lifetime);
-    });
-
     // re-map the result to entity
-    return relevantStatuses.map((status: Status): Tweet => {
+    return statuses.map((status: Status): Tweet => {
       const user = status.user as FullUser;
 
       return Tweet.fromJSON({
@@ -71,10 +79,14 @@ export class TwitterRepository {
    * went successfully or not
    */
   public retweet = async (tweetId: string): Promise<boolean> => {
-    const response = await this.twitterClient
-      .post('statuses/retweet/:id', { id: tweetId });
+    try {
+      const response = await this.twitterClient
+        .post('statuses/retweet/:id', { id: tweetId });
 
-    return !!response['retweeted_status'];
+      return !!response['retweeted_status'];
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -84,11 +96,15 @@ export class TwitterRepository {
    * @return {Promise<boolean>} `true` if the user exist, `false` otherwise
    */
   public isUserExist = async (username: string): Promise<boolean> => {
-    const account = await this.twitterClient.get(
-      'users/lookup',
-      { screen_name: username },
-    );
+    try {
+      await this.twitterClient.get(
+        'users/lookup',
+        { screen_name: username },
+      );
 
-    return account.length > 0;
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

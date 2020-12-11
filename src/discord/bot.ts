@@ -177,7 +177,7 @@ export class DallyDoseBot {
         '\n\n' +
         `Author: **@${tweet.author}**` +
         '\n' +
-        `Fetched At: ${format(tweet.fetchedAt, 'D MMMM YYYY — HH:mm Z')}` +
+        `Fetched At: ${format(tweet.fetchedAt, 'd MMMM yyyy — HH:mm Z')}` +
         '\n' +
         `Link: ${tweet.url}` +
         '\n\n' +

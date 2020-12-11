@@ -9,7 +9,7 @@ export async function fetchFreshTweets(
 ): Promise<void> {
   const usersOfInterest = await userRepository.getUsersOfInterest();
 
-  if (usersOfInterest) {
+  if (usersOfInterest.length) {
     const sources = usersOfInterest.map(user => user.name);
 
     const freshTweets = await twitterRepository.getRelevantTweets(
