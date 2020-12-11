@@ -8,22 +8,27 @@ export async function fetchFreshTweets(
   { userRepository, tweetRepository, twitterRepository, emitter }: Context,
 ): Promise<void> {
   const usersOfInterest = await userRepository.getUsersOfInterest();
-  const sources = usersOfInterest.map(user => user.name);
 
-  const freshTweets = await twitterRepository.getRelevantTweets(
-    sources,
-    ONE_DAY,
-  );
+  if (usersOfInterest) {
+    const sources = usersOfInterest.map(user => user.name);
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log(freshTweets);
+    const freshTweets = await twitterRepository.getRelevantTweets(
+      sources,
+      ONE_DAY,
+    );
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(freshTweets);
+    }
+
+    if (freshTweets.length) {
+      const insertedTweets = await tweetRepository.insertFreshTweets(freshTweets);
+
+      if (insertedTweets.length !== freshTweets.length) {
+        // log
+      }
+
+      emitter.emit(TWEET_INSERT, insertedTweets);
+    }
   }
-
-  const insertedTweets = await tweetRepository.insertFreshTweets(freshTweets);
-
-  if (insertedTweets.length !== freshTweets.length) {
-    // log
-  }
-
-  emitter.emit(TWEET_INSERT, insertedTweets);
 }

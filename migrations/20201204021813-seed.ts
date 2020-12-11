@@ -45,7 +45,6 @@ module.exports = {
             },
             approvedAt: {
               bsonType: 'date',
-              description: 'Tweet approval time is required',
             },
           },
         },

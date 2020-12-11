@@ -10,8 +10,6 @@ import { Db, MongoClient } from 'mongodb';
 export async function getDb(): Promise<Db> {
   const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}`;
 
-  console.log(url);
-
   const dbClient = await MongoClient.connect(
     url,
     {

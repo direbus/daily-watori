@@ -3,7 +3,7 @@ import { Context } from '../../common/types';
 import { prefix } from './../../../bot.config.json';
 
 export default {
-  name: 'unwatch',
+  command: 'unwatch',
   description: 'Remove a Twitter user from the watchlist',
   execute: async (
     message: Message,

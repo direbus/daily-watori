@@ -53,6 +53,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
 
       return tweets;
     } catch (err) {
+      console.log(err);
       const rejectedTweets: string[] = err.writeErrors.map(
         (error: any) => error.op.tweetId, // get all duplicate tweetId
       );

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:bot": "nodemon src/index.ts",
-    "dev:fetch-tweets": "npx cross-env NODE_ENV='development' ts-node scripts/fetch-tweets.ts",
+    "dev": "nodemon src/index.ts",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",

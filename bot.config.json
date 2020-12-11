@@ -5,7 +5,8 @@
     "no": "❌",
     "instant": "⚡"
   },
-  "channelName": "dally-tweets",
+  "categoryChannelName": "daily-watori",
+  "textChannelName": "tweets",
   "fetchSchedule": "0 0 * * *",
   "retweetSchedule": "0 */8 * * *",
   "retweetLimit": 3

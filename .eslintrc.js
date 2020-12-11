@@ -45,6 +45,7 @@ module.exports = {
       },
     ],
     'max-len': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'require-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'valid-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'new-cap': 'off', // prevent decorator issues

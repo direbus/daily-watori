@@ -64,6 +64,8 @@ import { Tweet } from './entity/tweet';
     if (feedback) {
       if (process.env.NODE_ENV === 'development') {
         console.log('DallyDose successfully connected to Discord server!');
+
+        await fetchFreshTweets(context); // fetch it once
       }
 
       // fetch fresh tweets every 24 hour

@@ -19,7 +19,7 @@ export default {
     if (twitterUserExist) {
       const dbUserExist = await userRepository.isUserExist(args[0]);
 
-      if (!dbUserExist) {
+      if (dbUserExist) {
         return message.reply('This username is already exist on the watchlist.');
       }
 

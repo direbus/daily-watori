@@ -18,18 +18,18 @@ export default {
       let reply = 'List of available commands:\n';
 
       commandFiles.forEach(async (file: string): Promise<void> => {
-        const { command, description }: CommandHandler = await import(
-          resolve(__dirname, file)
-        );
+        const { command, description } = require(
+          resolve(__dirname, file),
+        ).default as CommandHandler;
 
         reply += `\n**${prefix}${command}** — ${description}`;
       });
 
-      reply += `\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
+      reply += `\n\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
 
       return message.reply(reply);
     } else {
-      return message.reply('UNIMPLEMNTED');
+      return message.reply('UNIMPLEMENTED');
     }
   },
 };

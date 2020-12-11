@@ -1,8 +1,8 @@
-import { Client, Collection, Guild, Message, MessageReaction, TextChannel, User } from 'discord.js';
+import { Client, Collection, Guild, Message, MessageReaction, OverwriteResolvable, Role, TextChannel, User } from 'discord.js';
 import { format } from 'date-fns';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
-import { prefix, channelName, react } from './../../bot.config.json';
+import { prefix, textChannelName, categoryChannelName, react } from './../../bot.config.json';
 import { CommandHandler, Context, HandlerFunction, RETWEET } from '../common/types';
 import { Tweet } from '../entity/tweet';
 
@@ -22,9 +22,9 @@ export class DallyDoseBot {
 
     const commandFiles = readdirSync(resolve(__dirname, 'commands'));
     commandFiles.forEach(async (file: string): Promise<void> => {
-      const { command, execute }: CommandHandler = await import(
-        resolve(__dirname, 'commands', file)
-      );
+      const { command, execute } = require(
+        resolve(__dirname, 'commands', file),
+      ).default as CommandHandler;
 
       this.commands.set(command, execute);
     });
@@ -42,14 +42,48 @@ export class DallyDoseBot {
   private onReady = async (): Promise<void> => {
     // for each connected guild, create a text channel to manage this bot
     this.guilds.forEach(async (guild: Guild) => {
-      const channel = guild.channels.cache.find(
-        channel => channel.name === channelName,
+      let categoryChannel = guild.channels.cache.find(
+        channel => channel.name === categoryChannelName && channel.type === 'category',
       );
 
-      if (!channel) { // create a new
-        await guild.channels.create(channelName, { type: 'news' });
-      } else if (channel.type !== 'news') {
-        throw new Error('Channel already exists, specify different channel name in the configuration');
+      let textChannel = guild.channels.cache.find(
+        channel => channel.name === textChannelName && channel.type === 'text',
+      );
+
+      if (!textChannel) { // create a new channel to manage your tweets
+        const permissions: OverwriteResolvable[] = guild.roles.cache
+          .map(
+            (role: Role): OverwriteResolvable => ({
+              id: role,
+              deny: [
+                'ATTACH_FILES',
+                'SEND_TTS_MESSAGES',
+                'MENTION_EVERYONE',
+                'EMBED_LINKS',
+                'USE_EXTERNAL_EMOJIS',
+              ],
+              allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'],
+            }),
+          );
+
+        if (!categoryChannel && categoryChannelName) {
+          categoryChannel = await guild.channels.create(
+            categoryChannelName,
+            {
+              type: 'category',
+              permissionOverwrites: permissions,
+            },
+          );
+        }
+
+        textChannel = await guild.channels.create(
+          textChannelName,
+          {
+            type: 'text',
+            parent: categoryChannel,
+            permissionOverwrites: permissions,
+          },
+        );
       }
     });
 
@@ -99,7 +133,7 @@ export class DallyDoseBot {
 
     if (
       reaction.message.channel.type !== 'news' ||
-      (channel as TextChannel).name !== channelName ||
+      (channel as TextChannel).name !== textChannelName ||
       user.bot
     ) {
       return;
@@ -152,7 +186,7 @@ export class DallyDoseBot {
 
     this.guilds.forEach(async (guild: Guild): Promise<void> => {
       const channel = guild.channels.cache.find(
-        channel => channel.name === channelName,
+        channel => channel.name === textChannelName,
       );
 
       if (channel) {

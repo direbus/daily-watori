@@ -7,10 +7,7 @@
     "NODE_ENV": "development"
   },
   "watch": [
-    "src/discord",
-    "src/model",
-    "src/repository",
-    "src/index.ts"
+    "src/**/*.ts"
   ],
   "ext": "ts,js,json"
 }
