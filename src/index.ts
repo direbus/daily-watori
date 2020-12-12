@@ -52,7 +52,9 @@ import { Tweet } from './entity/tweet';
   const bot = new DallyDoseBot(discordClient, context);
 
   emitter.on(TWEET_INSERT, async (tweets: Tweet[]) => {
-    await bot.sendFreshTweets(tweets);
+    if (bot.ready) {
+      await bot.sendFreshTweets(tweets);
+    }
   });
   emitter.on(RETWEET, async (tweetId: string) => {
     await retweet(tweetId, context);

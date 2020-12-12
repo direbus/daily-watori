@@ -1,12 +1,14 @@
-import { Message } from 'discord.js';
-import { readdirSync } from 'fs';
+import { Message, MessageEmbed } from 'discord.js';
+import { readdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { CommandHandler } from '../../common/types';
 import { prefix } from './../../../bot.config.json';
 
 export default {
   command: 'help',
-  description: 'Show the help menu, like you\'re currently seeing',
+  description: 'Show the help menu, like the one you\'re currently seeing',
+  params: [],
+  example: `\`${prefix}help\``,
   execute: async (
     message: Message,
     args: string[], // use the args later
@@ -29,7 +31,44 @@ export default {
 
       return message.reply(reply);
     } else {
-      return message.reply('UNIMPLEMENTED');
+      if (!existsSync(resolve(__dirname, `${args[0]}.ts`))) {
+        return message.reply('That command doesn\'t exist!');
+      }
+
+      const { command, description, example, params }: CommandHandler = require(
+        resolve(__dirname, `${args[0]}.ts`),
+      ).default;
+
+      const fields = [
+        {
+          name: 'Description',
+          value: description,
+        },
+      ];
+
+      if (params.length) {
+        const argsString = params.map(
+          val => `- \`${val.name}\` — ${val.description}`,
+        );
+
+        fields.push({
+          name: 'Arguments',
+          value: argsString.join('\n'),
+        });
+      }
+
+      fields.push({
+        name: 'Example',
+        value: example,
+      });
+
+      const embed = new MessageEmbed({
+        color: 0xE8F0FE,
+        title: `**\`${command}\` command**`,
+        fields,
+      });
+
+      return message.reply({ embed });
     }
   },
 };

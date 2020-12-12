@@ -13,6 +13,7 @@ import { Tweet } from '../entity/tweet';
 export class DallyDoseBot {
   private readonly commands: Collection<string, HandlerFunction>;
   private readonly guilds: Collection<string, Guild>;
+  public ready: boolean;
 
   constructor(
     private readonly client: Client,
@@ -30,6 +31,7 @@ export class DallyDoseBot {
     });
 
     this.guilds = client.guilds.cache;
+    this.ready = false;
 
     this.client.addListener('message', this.onMessage);
     this.client.addListener('messageReactionAdd', this.onReact);
@@ -59,13 +61,18 @@ export class DallyDoseBot {
                 'ATTACH_FILES',
                 'SEND_TTS_MESSAGES',
                 'MENTION_EVERYONE',
-                'EMBED_LINKS',
                 'USE_EXTERNAL_EMOJIS',
               ],
-              allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'],
+              allow: [
+                'VIEW_CHANNEL',
+                'ADD_REACTIONS',
+                'READ_MESSAGE_HISTORY',
+                'EMBED_LINKS',
+              ],
             }),
           );
 
+        // add a new category channel if preferred
         if (!categoryChannel && categoryChannelName) {
           categoryChannel = await guild.channels.create(
             categoryChannelName,
@@ -76,6 +83,7 @@ export class DallyDoseBot {
           );
         }
 
+        // add the new text channel that acts as a `news` channel
         textChannel = await guild.channels.create(
           textChannelName,
           {
@@ -94,6 +102,8 @@ export class DallyDoseBot {
         name: 'Managing your daily dose of tweets',
       },
     });
+
+    this.ready = true;
   }
 
   /**
@@ -101,6 +111,7 @@ export class DallyDoseBot {
    */
   private onMessage = async (message: Message): Promise<Message | undefined> => {
     const channel = message.channel as TextChannel;
+
     if (message.author.bot ||
         !message.content.startsWith(prefix) ||
         message.channel.type !== 'text' ||
@@ -136,9 +147,9 @@ export class DallyDoseBot {
     const channel = message.channel;
 
     if (
-      reaction.message.channel.type !== 'news' ||
+      reaction.message.channel.type !== 'text' ||
       (channel as TextChannel).name !== textChannelName ||
-      user.bot
+      user.id === message.guild?.me?.id
     ) {
       return;
     }
@@ -177,15 +188,21 @@ export class DallyDoseBot {
    */
   public sendFreshTweets = async (tweets: Tweet[]): Promise<void> => {
     const messageFormatter = (tweet: Tweet) => {
-      return '**FRESH TWEETS**' +
+      return '**⚠️ FRESH TWEET ALERT ⚠️**' +
         '\n\n' +
-        `Author: **@${tweet.author}**` +
+        `**Author**: **@${tweet.author}**` +
         '\n' +
-        `Fetched At: ${format(tweet.fetchedAt, 'd MMMM yyyy — HH:mm OOOO')}` +
+        `**Fetched At**: ${format(tweet.fetchedAt, 'd MMMM yyyy — HH:mm OOOO')}` +
         '\n' +
-        `Link: ${tweet.url}` +
+        `**Link** : ${tweet.url}` +
         '\n\n' +
-        '**React to manage this tweet**';
+        '**React with the provided emojis below:**' +
+        '\n' +
+        `- **${react.yes} to add this tweet to the next retweet cycle;**` +
+        '\n' +
+        `- **${react.no} to reject this tweet;**` +
+        '\n' +
+        `- **${react.instant} to retweet this tweet at once.**`;
     };
 
     this.guilds.forEach(async (guild: Guild): Promise<void> => {
@@ -196,11 +213,15 @@ export class DallyDoseBot {
       if (channel) {
         const textChannel = channel as TextChannel;
 
-        const messages = await Promise.all(
-          tweets.map(
-            tweet => textChannel.send(messageFormatter(tweet)),
-          ),
-        );
+        const messages = tweets.map(async (tweet: Tweet) => {
+          const message = await textChannel.send(messageFormatter(tweet));
+
+          const reactions = Object.values(react).map(
+            val => message.react(val),
+          );
+
+          await Promise.all(reactions);
+        });
 
         await Promise.all(messages);
       } else {

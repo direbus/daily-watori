@@ -1,10 +1,18 @@
 import { Message } from 'discord.js';
 import { Context } from '../../common/types';
 import { User } from '../../entity/user';
+import { prefix } from './../../../bot.config.json';
 
 export default {
   command: 'watch',
   description: 'Add a Twitter user to the watchlist',
+  params: [
+    {
+      name: 'name',
+      description: 'Twitter user\'s **username** a.k.a **handle**',
+    },
+  ],
+  example: `\`${prefix}unwatch lakban_hitam\``,
   execute: async (
     message: Message,
     args: string[],

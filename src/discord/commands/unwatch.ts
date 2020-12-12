@@ -5,6 +5,13 @@ import { prefix } from './../../../bot.config.json';
 export default {
   command: 'unwatch',
   description: 'Remove a Twitter user from the watchlist',
+  params: [
+    {
+      name: 'name',
+      description: 'Twitter user\'s **username** a.k.a **handle**',
+    },
+  ],
+  example: `\`${prefix}unwatch lakban_hitam\``,
   execute: async (
     message: Message,
     args: string[],

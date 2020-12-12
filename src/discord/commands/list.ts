@@ -1,10 +1,13 @@
 import { Message } from 'discord.js';
 import { Context } from '../../common/types';
 import { User } from '../../entity/user';
+import { prefix } from './../../../bot.config.json';
 
 export default {
   command: 'list',
   description: 'Show the list of users on the watchlist',
+  params: [],
+  example: `\`${prefix}list\``,
   execute: async (
     message: Message,
     _: string[],
