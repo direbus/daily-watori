@@ -100,7 +100,11 @@ export class DallyDoseBot {
    * Respond when a user sends a message to the server
    */
   private onMessage = async (message: Message): Promise<Message | undefined> => {
-    if (message.author.bot || !message.content.startsWith(prefix)) {
+    const channel = message.channel as TextChannel;
+    if (message.author.bot ||
+        !message.content.startsWith(prefix) ||
+        message.channel.type !== 'text' ||
+        channel.name !== textChannelName) {
       return;
     }
 
