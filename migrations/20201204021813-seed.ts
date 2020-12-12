@@ -41,10 +41,7 @@ module.exports = {
             },
             hasRetweeted: {
               bsonType: 'bool',
-              description: 'A boolean that indicates if the current tweet has been retweeted is required',
-            },
-            approvedAt: {
-              bsonType: 'date',
+              description: 'Retweeted status is required',
             },
           },
         },
@@ -58,7 +55,7 @@ module.exports = {
     await db.collection<TweetEntity>('tweet').dropIndexes();
     await db.collection<User>('user').dropIndexes();
 
-    await db.dropCollection('tweet');
-    await db.dropCollection('user');
+    await db.collection('tweet').drop();
+    await db.collection('user').drop();
   },
 };

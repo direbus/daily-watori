@@ -14,26 +14,32 @@ export default {
       return message.reply('The username for the intended target must be supplied!');
     }
 
-    const twitterUserExist = await twitterService.isUserExist(args[0]);
+    let name = args[0];
+
+    if (name.startsWith('@')) {
+      name = name.slice(1);
+    }
+
+    const twitterUserExist = await twitterService.isUserExist(name);
 
     if (twitterUserExist) {
-      const dbUserExist = await userRepository.isUserExist(args[0]);
+      const dbUserExist = await userRepository.isUserExist(name);
 
       if (dbUserExist) {
         return message.reply('This username is already exist on the watchlist.');
       }
 
       const user: User = {
-        name: args[0],
+        name,
       };
 
       const insertResult = await userRepository.addUser(user);
 
       if (insertResult) {
-        return message.reply(`Successfully inserted **@${args[0]}** to the watchlist, now this server will recieve any tweets from that user`);
+        return message.reply(`Successfully inserted **@${name}** to the watchlist, now this server will receive image tweets from **@${name}**`);
       }
 
-      return message.reply(`Failed to insert **@${args[0]}** to the watchlist`);
+      return message.reply(`Failed to insert **@${name}** to the watchlist`);
     } else {
       return message.reply('This username doesn\'t exist on Twitter. Remember that the bot needs the **username** not the **screen name**.');
     }
