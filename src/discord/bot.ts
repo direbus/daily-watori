@@ -15,7 +15,7 @@ export class DallyDoseBot {
   private readonly guilds: Collection<string, Guild>;
   public ready: boolean;
 
-  constructor(
+  public constructor(
     private readonly client: Client,
     private readonly context: Context,
   ) {
@@ -103,27 +103,27 @@ export class DallyDoseBot {
       },
     });
 
-    this.ready = true;
+    this.ready = true; // prevents tweet subscription message to be sent when the channel setup has not finished
   }
 
   /**
    * Respond when a user sends a message to the server
    */
   private onMessage = async (message: Message): Promise<Message | undefined> => {
-    const channel = message.channel as TextChannel;
+    const { author, content, channel, partial } = message;
 
-    if (message.author.bot ||
-        !message.content.startsWith(prefix) ||
-        message.channel.type !== 'text' ||
+    if (author.bot ||
+        !content.startsWith(prefix) ||
+        channel.type !== 'text' ||
         channel.name !== textChannelName) {
       return;
     }
 
-    if (message.partial) { // prevent partials
+    if (partial) { // prevent partials
       await message.fetch();
     }
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = content.slice(prefix.length).split(/ +/);
     const commandName = (args.shift() as string).toLowerCase();
 
     const handler = this.commands.get(commandName);
@@ -131,7 +131,7 @@ export class DallyDoseBot {
     if (handler) {
       return handler(message, args, this.context);
     } else {
-      return message.reply(
+      return channel.send(
         `Command unknown, please refer to \`${prefix}help\` for more information about how to use this bot.`,
       );
     }
@@ -190,11 +190,11 @@ export class DallyDoseBot {
     const messageFormatter = (tweet: Tweet) => {
       return '**⚠️ FRESH TWEET ALERT ⚠️**' +
         '\n\n' +
-        `**Author**: **@${tweet.author}**` +
+        `**👤 Author**: **@${tweet.author}**` +
         '\n' +
-        `**Fetched At**: ${format(tweet.fetchedAt, 'd MMMM yyyy — HH:mm OOOO')}` +
+        `**⌚ Fetched At**: ${format(tweet.fetchedAt, 'd MMMM yyyy — HH:mm OOOO')}` +
         '\n' +
-        `**Link** : ${tweet.url}` +
+        `**🌐 Tweet Link** : ${tweet.url}` +
         '\n\n' +
         '**React with the provided emojis below:**' +
         '\n' +

@@ -18,8 +18,10 @@ export default {
     args: string[],
     { twitterRepository: twitterService, userRepository }: Context,
   ): Promise<Message> => {
+    const { channel } = message;
+
     if (!args.length) {
-      return message.reply('The username for the intended target must be supplied!');
+      return channel.send('The username for the intended target must be supplied!');
     }
 
     let name = args[0];
@@ -34,7 +36,7 @@ export default {
       const dbUserExist = await userRepository.isUserExist(name);
 
       if (dbUserExist) {
-        return message.reply('This username is already exist on the watchlist.');
+        return channel.send('This username is already exist on the watchlist.');
       }
 
       const user: User = {
@@ -44,12 +46,12 @@ export default {
       const insertResult = await userRepository.addUser(user);
 
       if (insertResult) {
-        return message.reply(`Successfully inserted **@${name}** to the watchlist, now this server will receive image tweets from **@${name}**`);
+        return channel.send(`Successfully inserted **@${name}** to the watchlist, now this server will receive image tweets from **@${name}**`);
       }
 
-      return message.reply(`Failed to insert **@${name}** to the watchlist`);
+      return channel.send(`Failed to insert **@${name}** to the watchlist`);
     } else {
-      return message.reply('This username doesn\'t exist on Twitter. Remember that the bot needs the **username** not the **screen name**.');
+      return channel.send('This username doesn\'t exist on Twitter. Remember that the bot needs the **username** not the **screen name**.');
     }
   },
 };

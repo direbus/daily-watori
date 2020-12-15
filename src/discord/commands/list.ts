@@ -13,6 +13,7 @@ export default {
     _: string[],
     { userRepository }: Context,
   ): Promise<Message> => {
+    const { channel } = message;
     const users = await userRepository.getUsersOfInterest();
 
     if (users.length) {
@@ -26,9 +27,9 @@ export default {
         reply += `\n**@${name}** — ${getTwitterLink(name)}`;
       });
 
-      return message.reply(reply);
+      return channel.send(reply);
     } else {
-      return message.reply('It seems I haven\'t watched anyone yet. Try adding someone to the watchlist with `!watch <name>`?');
+      return channel.send('It seems I haven\'t watched anyone yet. Try adding someone to the watchlist with `!watch <name>`?');
     }
   },
 };

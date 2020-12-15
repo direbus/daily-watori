@@ -33,7 +33,10 @@ import { Tweet } from './entity/tweet';
     throw new Error('Discord token has not been set');
   }
 
-  const discordClient = new Client();
+  const discordClient = new Client({
+    partials: ['MESSAGE', 'REACTION'], // enables uncached reactions to be responded
+  });
+
   const twitterClient = new Twitter({
     consumer_key: process.env.CONSUMER_TOKEN,
     consumer_secret: process.env.CONSUMER_SECRET,

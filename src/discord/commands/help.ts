@@ -6,13 +6,15 @@ import { prefix } from './../../../bot.config.json';
 
 export default {
   command: 'help',
-  description: 'Show the help menu, like the one you\'re currently seeing',
+  description: 'Show the help menu, which will show the list of available command for this bot.',
   params: [],
   example: `\`${prefix}help\``,
   execute: async (
     message: Message,
     args: string[], // use the args later
   ): Promise<Message> => {
+    const { channel } = message;
+
     if (args.length === 0) {
       const commandFiles = readdirSync(resolve(__dirname));
 
@@ -29,10 +31,10 @@ export default {
 
       reply += `\n\nPlease use \`${prefix}help <command_name>\` for more detailed information for that particular command`;
 
-      return message.reply(reply);
+      return channel.send(reply);
     } else {
       if (!existsSync(resolve(__dirname, `${args[0]}.ts`))) {
-        return message.reply('That command doesn\'t exist!');
+        return channel.send(`Command ${args[0]} doesn't exist!`);
       }
 
       const { command, description, example, params }: CommandHandler = require(
@@ -68,7 +70,7 @@ export default {
         fields,
       });
 
-      return message.reply({ embed });
+      return channel.send({ embed });
     }
   },
 };

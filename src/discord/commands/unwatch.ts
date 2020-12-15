@@ -17,8 +17,10 @@ export default {
     args: string[],
     { userRepository }: Context,
   ): Promise<Message> => {
+    const { channel } = message;
+
     if (!args.length) {
-      return message.reply('The username for the intended target must be supplied');
+      return channel.send('The username for the intended target must be supplied');
     }
 
     const userExist = await userRepository.isUserExist(args[0]);
@@ -27,10 +29,10 @@ export default {
       const deleteResult = await userRepository.deleteUser(args[0]);
 
       return deleteResult ?
-        message.reply(`Successfully removed **@${args[0]}** from the watchlist`) :
-        message.reply(`Failed to remove **@${args[0]}** from the watchlist`);
+        channel.send(`Successfully removed **@${args[0]}** from the watchlist`) :
+        channel.send(`Failed to remove **@${args[0]}** from the watchlist`);
     } else {
-      return message.reply(`This user doesn't exist in the watchlist. Try adding it first using \`${prefix}watch ${args[0]}\``);
+      return channel.send(`This user doesn't exist in the watchlist. Try adding it first using \`${prefix}watch ${args[0]}\``);
     }
   },
 };
