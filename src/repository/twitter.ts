@@ -81,10 +81,11 @@ export class TwitterRepository {
   public retweet = async (tweetId: string): Promise<boolean> => {
     try {
       const response = await this.twitterClient
-        .post('statuses/retweet/:id', { id: tweetId });
+        .post('statuses/retweet', { id: tweetId });
 
       return !!response['retweeted_status'];
-    } catch {
+    } catch (e) {
+      console.log(e);
       return false;
     }
   }

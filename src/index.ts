@@ -34,7 +34,7 @@ import { Tweet } from './entity/tweet';
   }
 
   const discordClient = new Client({
-    partials: ['MESSAGE', 'REACTION'], // enables uncached reactions to be responded
+    partials: ['CHANNEL', 'MESSAGE', 'REACTION'],
   });
 
   const twitterClient = new Twitter({
@@ -68,7 +68,7 @@ import { Tweet } from './entity/tweet';
 
     if (feedback) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('DallyDose successfully connected to Discord server!');
+        console.log('Daily Watori successfully connected to Discord server!');
 
         await fetchFreshTweets(context); // fetch it once
       }

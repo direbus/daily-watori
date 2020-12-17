@@ -29,7 +29,7 @@ export default {
 
       return channel.send(reply);
     } else {
-      return channel.send('It seems I haven\'t watched anyone yet. Try adding someone to the watchlist with `!watch <name>`?');
+      return channel.send('It seems I haven\'t watched anyone yet. Try adding someone to the watchlist with `!watch <name>` command.');
     }
   },
 };

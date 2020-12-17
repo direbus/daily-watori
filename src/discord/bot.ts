@@ -1,4 +1,4 @@
-import { Client, Collection, Guild, Message, MessageReaction, OverwriteResolvable, Role, TextChannel, User } from 'discord.js';
+import { Client, Collection, Guild, Message, MessageReaction, OverwriteResolvable, PartialUser, Role, TextChannel, User } from 'discord.js';
 import { format } from 'date-fns';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
@@ -33,9 +33,9 @@ export class DallyDoseBot {
     this.guilds = client.guilds.cache;
     this.ready = false;
 
-    this.client.addListener('message', this.onMessage);
-    this.client.addListener('messageReactionAdd', this.onReact);
-    this.client.addListener('ready', this.onReady);
+    this.client.on('ready', this.onReady);
+    this.client.on('message', this.onMessage);
+    this.client.on('messageReactionAdd', this.onReact);
   }
 
   /**
@@ -109,18 +109,20 @@ export class DallyDoseBot {
   /**
    * Respond when a user sends a message to the server
    */
-  private onMessage = async (message: Message): Promise<Message | undefined> => {
-    const { author, content, channel, partial } = message;
+  private onMessage = async (
+    message: Message,
+  ): Promise<Message | undefined> => {
+    if (message.partial) {
+      await message.fetch();
+    }
+
+    const { author, content, channel } = message;
 
     if (author.bot ||
         !content.startsWith(prefix) ||
         channel.type !== 'text' ||
         channel.name !== textChannelName) {
       return;
-    }
-
-    if (partial) { // prevent partials
-      await message.fetch();
     }
 
     const args = content.slice(prefix.length).split(/ +/);
@@ -140,22 +142,32 @@ export class DallyDoseBot {
   /**
    * Respond when a reaction is added on tweet notification message
    */
-  private onReact = async (reaction: MessageReaction, user: User): Promise<void> => {
-    const { partial, emoji, message } = reaction;
+  private onReact = async (
+    reaction: MessageReaction,
+    user: User | PartialUser,
+  ): Promise<void> => {
+    // prefer full reaction data
+    if (reaction.partial) {
+      await reaction.fetch();
+    }
+
+    // prefer full user data
+    if (user.partial) {
+      await user.fetch();
+    }
+
+    const { emoji, message } = reaction;
     const { yes, no, instant } = react;
 
     const channel = message.channel;
 
     if (
+      user.bot ||
       reaction.message.channel.type !== 'text' ||
       (channel as TextChannel).name !== textChannelName ||
-      user.id === message.guild?.me?.id
+      message.reactions.cache.some(react => react.emoji.name === '👌') // prevent handling an already handled tweet
     ) {
       return;
-    }
-
-    if (partial) { // prevent partials
-      await reaction.fetch();
     }
 
     const url = /https:\/\/twitter.com\/\w+\/status\/(\d+)/;
