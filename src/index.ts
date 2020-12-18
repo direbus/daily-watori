@@ -13,6 +13,8 @@ import { retweet, scheduledRetweet } from './service/retweet';
 import { fetchFreshTweets } from './service/fetch';
 import { RETWEET, TWEET_INSERT } from './common/types';
 import { Tweet } from './entity/tweet';
+import { logger } from './utils/logger';
+import { exit } from 'process';
 
 (async function() {
   if (process.env.NODE_ENV === 'development') {
@@ -67,9 +69,9 @@ import { Tweet } from './entity/tweet';
     const feedback = await bot.start(process.env.DISCORD_TOKEN);
 
     if (feedback) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Daily Watori successfully connected to Discord server!');
+      logger.info('Daily Watori successfully connected to Discord server!');
 
+      if (process.env.NODE_ENV === 'development') {
         await fetchFreshTweets(context); // fetch it once
       }
 
@@ -89,6 +91,7 @@ import { Tweet } from './entity/tweet';
       console.error(err);
     }
 
-    throw err;
+    logger.error(err.message);
+    exit(1);
   }
 })();

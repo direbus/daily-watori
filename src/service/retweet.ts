@@ -1,4 +1,5 @@
 import { Context } from '../common/types';
+import { logger } from '../utils/logger';
 import { retweetLimit } from './../../bot.config.json';
 
 /**
@@ -13,6 +14,8 @@ import { retweetLimit } from './../../bot.config.json';
 export async function scheduledRetweet(
   context: Context,
 ): Promise<void> {
+  logger.info('Scheduled retweet started');
+
   const tweets = await context.tweetRepository
     .getApprovedTweets(
       retweetLimit,
@@ -23,7 +26,7 @@ export async function scheduledRetweet(
   );
 
   if (result.some(res => !res)) {
-    // log
+    logger.error(`Failed to retweet some scheduled retweets`);
   }
 }
 
@@ -40,7 +43,12 @@ export async function retweet(
   const retweetResult = await twitterRepository
     .retweet(tweetId);
 
+
   if (retweetResult) {
     await tweetRepository.markRetweet(tweetId);
+
+    logger.info(`Successfully retweeted a tweet with id ${tweetId}`);
+  } else {
+    logger.error(`Failed to retweet a tweet with id ${tweetId}`);
   }
 }

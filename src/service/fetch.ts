@@ -1,4 +1,5 @@
 import { Context, TWEET_INSERT } from '../common/types';
+import { logger } from '../utils/logger';
 import { freshnessThreshold } from './../../bot.config.json';
 
 /**
@@ -8,6 +9,8 @@ import { freshnessThreshold } from './../../bot.config.json';
 export async function fetchFreshTweets(
   { userRepository, tweetRepository, twitterRepository, emitter }: Context,
 ): Promise<void> {
+  logger.info('Scheduled tweet fetch started');
+
   const usersOfInterest = await userRepository.getUsersOfInterest();
 
   if (usersOfInterest.length) {
@@ -28,6 +31,8 @@ export async function fetchFreshTweets(
       if (insertedTweets.length !== freshTweets.length) {
         // log
       }
+
+      logger.info(`Fetched ${insertedTweets.length} tweets from ${usersOfInterest.length} users`);
 
       emitter.emit(TWEET_INSERT, insertedTweets);
     }

@@ -5,6 +5,7 @@ import { resolve } from 'path';
 import { prefix, textChannelName, categoryChannelName, react } from './../../bot.config.json';
 import { CommandHandler, Context, HandlerFunction, RETWEET } from '../common/types';
 import { Tweet } from '../entity/tweet';
+import { logger } from '../utils/logger';
 
 /**
  * Core functionality of the bot. Allows users to interact
@@ -237,7 +238,7 @@ export class DallyDoseBot {
 
         await Promise.all(messages);
       } else {
-        throw new Error('Failed to initialize bot correctly');
+        logger.error(`Failed to initialize bot correctly on ${guild.name}`);
       }
     });
   }

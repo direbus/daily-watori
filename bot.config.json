@@ -1,4 +1,5 @@
 {
+  "name": "daily-watori",
   "prefix": "!",
   "react": {
     "yes": "✅",
