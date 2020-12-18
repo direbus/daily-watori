@@ -34,7 +34,6 @@ export interface CommandHandler {
 }
 
 // useful const
-export const ONE_DAY = 86_400_000;
 export const TWEET_INSERT = Symbol('INSERT');
 export const RETWEET = Symbol('RETWEET');
 export const INSTANT_RETWEET = Symbol('INSTANT_RETWEET');

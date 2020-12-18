@@ -1,4 +1,5 @@
-import { Context, ONE_DAY, TWEET_INSERT } from '../common/types';
+import { Context, TWEET_INSERT } from '../common/types';
+import { freshnessThreshold } from './../../bot.config.json';
 
 /**
  * Fetch fresh tweets, insert them to the database, and
@@ -14,7 +15,7 @@ export async function fetchFreshTweets(
 
     const freshTweets = await twitterRepository.getRelevantTweets(
       sources,
-      ONE_DAY,
+      freshnessThreshold,
     );
 
     if (process.env.NODE_ENV === 'development') {

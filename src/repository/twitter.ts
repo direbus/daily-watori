@@ -85,7 +85,6 @@ export class TwitterRepository {
 
       return !!response['retweeted_status'];
     } catch (e) {
-      console.log(e);
       return false;
     }
   }
