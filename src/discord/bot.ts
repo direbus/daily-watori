@@ -187,9 +187,9 @@ export class DallyDoseBot {
       if (emoji.name === instant) {
         this.context.emitter.emit(RETWEET, tweetId);
       }
-
-      await message.react('👌');
     }
+
+    await message.react('👌');
   }
 
   /**
