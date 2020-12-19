@@ -8,6 +8,15 @@ import { Db, MongoClient } from 'mongodb';
  * @return {Db} MongoDB database
  */
 export async function getDb(): Promise<Db> {
+  if (
+    !process.env.DB_USERNAME ||
+    !process.env.DB_PASSWORD ||
+    !process.env.DB_HOST ||
+    !process.env.DB_PORT
+  ) {
+    throw new Error('Database information has not been set');
+  }
+
   const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}`;
 
   const dbClient = await MongoClient.connect(
