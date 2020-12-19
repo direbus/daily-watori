@@ -43,7 +43,6 @@ export async function retweet(
   const retweetResult = await twitterRepository
     .retweet(tweetId);
 
-
   if (retweetResult) {
     await tweetRepository.markRetweet(tweetId);
 
