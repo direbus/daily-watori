@@ -109,4 +109,23 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
 
     return result.result.ok === 1;
   }
+
+  /**
+   * Deletes all tweets that has been retweeted.
+   * Useful if the database is quota-limited.
+   *
+   * @returns {Promise<boolean>} A boolean which indicates if bulk deletion is performed
+   * successfully.
+   */
+  public clearHistory = async (): Promise<boolean> => {
+    const result = await this.collection
+      .deleteMany(
+        {
+          approvedAt: { $exists: true },
+          hasRetweeted: true,
+        },
+      );
+
+    return result.result.ok === 1;
+  }
 }
