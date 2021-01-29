@@ -1,0 +1,15 @@
+{
+  "name": "daily-watori",
+  "prefix": "!",
+  "react": {
+    "yes": "✅",
+    "no": "❌",
+    "instant": "⚡"
+  },
+  "categoryChannelName": "daily-watori",
+  "textChannelName": "tweets",
+  "freshnessThreshold": 86400000,
+  "fetchSchedule": "0 0 * * *",
+  "retweetSchedule": "0 */8 * * *",
+  "retweetLimit": 3
+}

@@ -31,7 +31,7 @@ module.exports = {
     ],
     'linebreak-style': [ // change this accordingly
       'warn',
-      'windows',
+      'unix',
     ],
     'object-curly-spacing': [
       'error',
@@ -44,7 +44,8 @@ module.exports = {
         'requireForBlockBody': true,
       },
     ],
-    'max-len': 'off', // NO
+    'max-len': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'require-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'valid-jsdoc': 'off', // favor eslint-plugin-jsdoc
     'new-cap': 'off', // prevent decorator issues
