@@ -15,7 +15,8 @@
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",
     "migration:up": "ts-node node_modules/.bin/migrate-mongo up -f migrate-mongo-config.ts && npm run migration:status",
     "migration:down": "ts-node node_modules/.bin/migrate-mongo down -f migrate-mongo-config.ts && npm run migration:status",
-    "db:purge": "npm run migration:down && npm run migration:up"
+    "db:purge": "npm run migration:down && npm run migration:up",
+    "release": "auto shipit"
   },
   "keywords": [],
   "author": "",
