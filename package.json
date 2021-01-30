@@ -1,6 +1,7 @@
 {
   "name": "daily-watori",
   "version": "1.0.0",
+  "private": true,
   "description": "Discord bot that manages and retweets relevant tweets for you",
   "main": "build/src/index.js",
   "scripts": {
@@ -38,6 +39,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@auto-it/first-time-contributor": "^10.13.3",
+    "@auto-it/git-tag": "^10.13.3",
+    "auto": "^10.13.3",
     "date-fns": "^2.16.1",
     "discord.js": "^12.5.1",
     "migrate-mongo": "^8.1.4",
@@ -46,5 +50,16 @@
     "pino": "^6.8.0",
     "pino-pretty": "^4.3.0",
     "twitter-lite": "^0.14.0"
+  },
+  "auto": {
+    "plugins": [
+      "git-tag",
+      "first-time-contributor",
+      "released"
+    ],
+    "owner": "chez14",
+    "repo": "daily-watori",
+    "name": "Replica (レプリカ)",
+    "email": "bots+repurika@christianto.net"
   }
 }
