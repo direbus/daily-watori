@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 export class TwitterRepository {
   public constructor(
     private readonly twitterClient: Twitter,
-  ) {}
+  ) { }
 
   /**
    * A utility function to build Twitter's search query,
@@ -105,6 +105,24 @@ export class TwitterRepository {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  /**
+   * Get information regarding current authenticated tweet account.
+   *
+   * @return {Promise<any>} user profile, and null when it fails.
+   */
+  public getSelfInfo = async (): Promise<any> => {
+    try {
+      let response = await this.twitterClient.get(
+        'statuses/user_timeline',
+        { count: 1, include_rts: true, exclude_replies: false }
+      );
+
+      return response?.[0]?.user;
+    } catch (e) {
+      return e;
     }
   }
 }
