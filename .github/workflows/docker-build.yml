@@ -3,9 +3,8 @@ name: Build and Publish Docker image
 on:
   schedule:
     - cron: "0 10 * * *" # everyday at 10am
-  push:
-    tags:
-      - "*"
+  release:
+    types: [published]
 
 jobs:
   main:
