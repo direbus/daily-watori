@@ -1,13 +1,12 @@
 version: "3.4"
 
 services:
-  dally-dose:
+  app:
     image: dally-dose
     build:
       context: .
       dockerfile: Dockerfile.prod
-    environment:
-      NODE_ENV: production
+    env_file: .env
     links:
       - "mongo:mongo"
 

@@ -1,19 +1,17 @@
 version: "3.4"
 
 services:
-  dally-dose:
+  app:
     image: dally-dose
     build:
       context: .
       dockerfile: Dockerfile.dev
     links:
       - "mongo:mongo"
-    environment:
-      NODE_ENV: development
+    env_file: .env
     volumes:
       - "./:/usr/src/app"
     ports:
-      - 3000
       - 9229:9229
     command: npm run start-barebone -- --inspect=0.0.0.0:9229
 
@@ -26,3 +24,14 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
       - ./.infra/db:/data/db
+
+  mongo-express:
+    image: mongo-express
+    links:
+      - "mongo:mongo"
+    env_file: .env
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${DB_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${DB_PASSWORD}
