@@ -7,6 +7,7 @@
     "dev": "nodemon src/index.ts",
     "build": "rm -rf ./build && tsc",
     "start": "pm2 start build/src/index.js --name bot",
+    "start-barebone": "node build/src/index.js",
     "stop": "pm2 stop bot",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
