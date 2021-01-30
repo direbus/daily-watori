@@ -1,19 +1,22 @@
 {
   "name": "daily-watori",
   "version": "1.0.0",
+  "private": true,
   "description": "Discord bot that manages and retweets relevant tweets for you",
   "main": "build/src/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "rm -rf ./build && tsc",
     "start": "pm2 start build/src/index.js --name bot",
+    "start-barebone": "node build/src/index.js",
     "stop": "pm2 stop bot",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",
     "migration:up": "ts-node node_modules/.bin/migrate-mongo up -f migrate-mongo-config.ts && npm run migration:status",
     "migration:down": "ts-node node_modules/.bin/migrate-mongo down -f migrate-mongo-config.ts && npm run migration:status",
-    "db:purge": "npm run migration:down && npm run migration:up"
+    "db:purge": "npm run migration:down && npm run migration:up",
+    "release": "auto shipit"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +40,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@auto-it/first-time-contributor": "^10.13.3",
+    "@auto-it/git-tag": "^10.13.3",
+    "auto": "^10.13.3",
     "date-fns": "^2.16.1",
     "discord.js": "^12.5.1",
     "migrate-mongo": "^8.1.4",
@@ -45,5 +51,14 @@
     "pino": "^6.8.0",
     "pino-pretty": "^4.3.0",
     "twitter-lite": "^0.14.0"
+  },
+  "auto": {
+    "plugins": [
+      "git-tag",
+      "first-time-contributor",
+      "released"
+    ],
+    "name": "Replica (レプリカ)",
+    "email": "bots+repurika@christianto.net"
   }
 }

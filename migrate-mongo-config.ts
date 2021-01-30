@@ -1,7 +1,9 @@
 // In this file you can configure migrate-mongo
 import { config } from 'dotenv';
 
-config();
+if (process.env.NODE_ENV === 'development') {
+  config();
+}
 
 const mongoConfig = {
   mongodb: {

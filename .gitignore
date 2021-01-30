@@ -1,5 +1,7 @@
 node_modules
 .vscode
 .env
+docker-compose.yml
 bot.log
 build
+.infra/
