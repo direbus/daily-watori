@@ -5,11 +5,17 @@ services:
     image: dally-dose
     build:
       context: .
-      dockerfile: Dockerfile.prod
-    environment:
-      NODE_ENV: production
+      dockerfile: Dockerfile.dev
     links:
       - "mongo:mongo"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - "./:/usr/src/app"
+    ports:
+      - 3000
+      - 9229:9229
+    command: npm run start-barebone -- --inspect=0.0.0.0:9229
 
   mongo:
     image: mongo:latest
