@@ -4,7 +4,6 @@ on:
   schedule:
     - cron: "0 10 * * *" # everyday at 10am
   release:
-    types: [published]
 
 jobs:
   main:
