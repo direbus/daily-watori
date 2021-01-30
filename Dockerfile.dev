@@ -6,4 +6,4 @@ WORKDIR /usr/src/app
 
 COPY ["package.json", "package-lock.json", "./"]
 
-CMD npm run start-barebone
+CMD npm run dev
