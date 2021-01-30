@@ -6,6 +6,6 @@ WORKDIR /usr/src/app
 
 COPY ["package.json", "package-lock.json", "./build/"]
 
-RUN npm ci --production --silent
+RUN npm i --production --silent
 
 CMD npm run start-barebone

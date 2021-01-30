@@ -4,8 +4,6 @@ ENV NODE_ENV development
 
 WORKDIR /usr/src/app
 
-COPY ["package.json", "package-lock.json", "./build/"]
-
-RUN npm ci --silent
+COPY ["package.json", "package-lock.json", "./"]
 
 CMD npm run start-barebone
