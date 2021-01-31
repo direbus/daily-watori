@@ -117,7 +117,7 @@ export class TwitterRepository {
     try {
       const response: Status[] = await this.twitterClient.get(
         'statuses/user_timeline',
-        { count: 1, include_rts: true, exclude_replies: false }
+        { count: 1, include_rts: true, exclude_replies: false },
       );
 
       if (response.length == 0) {
