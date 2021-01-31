@@ -111,18 +111,22 @@ export class TwitterRepository {
   /**
    * Get information regarding current authenticated tweet account.
    *
-   * @return {Promise<any>} user profile, and null when it fails.
+   * @return {Promise<FullUser | null>} user profile, and null when it fails.
    */
-  public getSelfInfo = async (): Promise<any> => {
+  public getSelfInfo = async (): Promise<FullUser | null> => {
     try {
-      let response = await this.twitterClient.get(
+      const response: Status[] = await this.twitterClient.get(
         'statuses/user_timeline',
         { count: 1, include_rts: true, exclude_replies: false }
       );
 
-      return response?.[0]?.user;
+      if (response.length == 0) {
+        return null;
+      }
+
+      return response[0].user as FullUser;
     } catch (e) {
-      return e;
+      return null;
     }
   }
 }
