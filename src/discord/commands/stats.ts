@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { Context } from '../../common/types';
 import { prefix } from '../../../bot.config.json';
 import { name, version } from "../../../package.json";
@@ -14,14 +14,14 @@ export default {
     { twitterRepository }: Context,
   ): Promise<Message> => {
     const { channel } = message;
-    let userInfo = await twitterRepository.getSelfInfo();
+    const userInfo = await twitterRepository.getSelfInfo();
 
-    let reply = [
-      `App run on ${name}@v${version}.`,
-      `Twitter Account bound on \`${userInfo?.name} @${userInfo?.screen_name}\``,
-      `https://twitter.com/${userInfo?.screen_name}`
-    ];
+    const infoEmbed = new MessageEmbed();
+    infoEmbed.setColor("#a0eeee")
+      .setTitle('Fleet Info')
+      .addField("Version", `${name}@v${version}`)
+      .addField("Twitter Account", `https://twitter.com/${userInfo?.screen_name}`)
 
-    return channel.send(reply.join("\n"));
+    return channel.send("Here's our info:", infoEmbed);
   },
 };
