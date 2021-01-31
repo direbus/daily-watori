@@ -1,6 +1,7 @@
 {
   "name": "daily-watori",
   "version": "1.0.0",
+  "private": true,
   "description": "Discord bot that manages and retweets relevant tweets for you",
   "main": "build/src/index.js",
   "scripts": {
@@ -9,19 +10,20 @@
     "lint:fix": "eslint --fix src/**",
     "build": "rm -rf ./build && tsc",
     "start": "pm2 start build/src/index.js --name bot",
+    "start-barebone": "node build/src/index.js",
     "stop": "pm2 stop bot",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",
     "migration:up": "ts-node node_modules/.bin/migrate-mongo up -f migrate-mongo-config.ts && npm run migration:status",
     "migration:down": "ts-node node_modules/.bin/migrate-mongo down -f migrate-mongo-config.ts && npm run migration:status",
-    "db:purge": "npm run migration:down && npm run migration:up"
+    "db:purge": "npm run migration:down && npm run migration:up",
+    "release": "auto shipit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
     "@types/mongodb": "^3.6.0",
     "@types/node": "^14.14.10",
     "@types/node-cron": "^2.0.3",
@@ -40,6 +42,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@auto-it/first-time-contributor": "^10.13.3",
+    "@auto-it/git-tag": "^10.13.3",
+    "auto": "^10.13.3",
     "date-fns": "^2.16.1",
     "discord.js": "^12.5.1",
     "migrate-mongo": "^8.1.4",
@@ -53,5 +58,14 @@
     "hooks": {
       "pre-commit": "npm run lint"
     }
+  },
+  "auto": {
+    "plugins": [
+      "git-tag",
+      "first-time-contributor",
+      "released"
+    ],
+    "name": "Replica (レプリカ)",
+    "email": "bots+repurika@christianto.net"
   }
 }
