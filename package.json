@@ -6,6 +6,8 @@
   "main": "build/src/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "lint": "eslint src/**",
+    "lint:fix": "eslint --fix src/**",
     "build": "rm -rf ./build && tsc",
     "start": "pm2 start build/src/index.js --name bot",
     "start-barebone": "node build/src/index.js",
