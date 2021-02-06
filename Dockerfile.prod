@@ -8,6 +8,15 @@ COPY ["package-lock.json", "package.json", "./"]
 
 COPY ["./build/", "./build/"]
 
+COPY ["./src/", "./src/"]
+
+# Copy the migration tools to make sure things works as intended.
+COPY ["./migrations/", "./migrations/"]
+COPY "./migrate-mongo-config.ts" "./migrate-mongo-config.ts"
+
+# Install development dependencies too for the migration.
+ENV NODE_ENV development
 RUN npm i
+ENV NODE_ENV production
 
 CMD npm run start:barebone
