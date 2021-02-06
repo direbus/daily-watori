@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix src/**",
     "build": "rm -rf ./build && tsc",
     "start": "pm2 start build/src/index.js --name bot",
-    "start-barebone": "node build/src/index.js",
+    "start:barebone": "node build/src/index.js",
     "stop": "pm2 stop bot",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
@@ -52,6 +52,7 @@
     "node-cron": "^2.0.3",
     "pino": "^6.11.0",
     "pino-pretty": "^4.4.0",
+    "tslib": "^2.1.0",
     "twitter-lite": "^0.14.0"
   },
   "auto": {
