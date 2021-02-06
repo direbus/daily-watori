@@ -1,3 +1,15 @@
+# v0.1.1 (Sat Feb 06 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix production build ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.1.0 (Sun Jan 31 2021)
 
 :tada: This release contains work from new contributors! :tada:
