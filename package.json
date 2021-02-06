@@ -14,7 +14,7 @@
     "stop": "pm2 stop bot",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.js' ",
-    "migration:build": "tsc migrations/*.ts",
+    "migration:build": "tsc --target 'esnext' migrations/*.ts ",
     "migration:status": "migrate-mongo status",
     "migration:up": "migrate-mongo up && npm run migration:status",
     "migration:down": "migrate-mongo down && npm run migration:status",
