@@ -1,3 +1,15 @@
+# v0.1.2 (Sat Feb 06 2021)
+
+#### ⚠️ Pushed to `master`
+
+- Install package dependencies for the migration parts ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.1.1 (Sat Feb 06 2021)
 
 #### ⚠️ Pushed to `master`
