@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if pull request follows the conventional commit style
-        uses: Namchee/conventional-pr@v0.4.0
+        uses: Namchee/conventional-pr@v0.4.1
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
