@@ -1,3 +1,19 @@
+# v0.2.0 (Fri Mar 12 2021)
+
+#### 🚀 Enhancement
+
+- feat: Add build step on migration files to reduce file size from ts-node [#20](https://github.com/direbus/daily-watori/pull/20) ([@Namchee](https://github.com/Namchee))
+
+#### 🧪 Tests
+
+- feat: Add workflow to ensure conventional style on pull requests [#21](https://github.com/direbus/daily-watori/pull/21) ([@Namchee](https://github.com/Namchee))
+
+#### Authors: 1
+
+- Cristopher ([@Namchee](https://github.com/Namchee))
+
+---
+
 # v0.1.2 (Sat Feb 06 2021)
 
 #### ⚠️ Pushed to `master`
