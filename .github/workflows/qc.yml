@@ -1,0 +1,14 @@
+name: Enforce conventional commit style on commits and pull requests
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  pr-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if pull request follows the conventional commit style
+        uses: Namchee/conventional-pr@v0.4.1
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN }}
