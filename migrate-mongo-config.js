@@ -1,7 +1,7 @@
 // In this file you can configure migrate-mongo
-import { config } from 'dotenv';
+const config = require('dotenv').config;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   config();
 }
 
@@ -26,7 +26,7 @@ const mongoConfig = {
   changelogCollectionName: 'changelog',
 
   // The file extension to create migrations and search for in migration dir
-  migrationFileExtension: '.ts',
+  migrationFileExtension: '.js',
 };
 
 module.exports = mongoConfig;
