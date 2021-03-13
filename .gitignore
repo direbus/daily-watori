@@ -5,6 +5,3 @@ docker-compose.yml
 bot.log
 build
 .infra/
-migrations/**/*.js
-src/**/*.js
-bot.log

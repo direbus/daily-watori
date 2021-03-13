@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   app:
-    image: daily-watori
+    image: dally-dose
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -22,8 +22,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
-    ports:
-      - 127.0.0.1:27017:27017
     volumes:
       - ./.infra/db:/data/db
 
