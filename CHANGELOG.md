@@ -1,3 +1,15 @@
+# v0.2.1 (Sat Mar 13 2021)
+
+#### 🐛 Bug Fix
+
+- refactor: Revert "feat: Add build step on migration files to reduce file size from ts-node" [#29](https://github.com/direbus/daily-watori/pull/29) ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.2.0 (Fri Mar 12 2021)
 
 #### 🚀 Enhancement
