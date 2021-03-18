@@ -140,7 +140,7 @@ export class DallyDoseBot {
         );
       }
     } catch (e) {
-      return await channel.send("Error while processing command.", errorToEmbed(e));
+      return await channel.send('Error while processing command.', errorToEmbed(e));
     }
   }
 

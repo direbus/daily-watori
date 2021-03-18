@@ -16,8 +16,8 @@ export default {
     try {
       await twitterRepository.sendTweet(message.content.substr(prefix.length));
     } catch (e) {
-      return await channel.send("Error while sending the tweet.", errorToEmbed(e));
+      return await channel.send('Error while sending the tweet.', errorToEmbed(e));
     }
-    return await channel.send("Immediate tweet sent succesfully.");
+    return await channel.send('Immediate tweet sent succesfully.');
   },
 };

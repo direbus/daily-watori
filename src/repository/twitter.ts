@@ -132,13 +132,13 @@ export class TwitterRepository {
 
   /**
    * Send tweets.
-   * 
+   *
    * @param message Tweet/status string.
    * @returns a Tweet object.
    */
   public async sendTweet(message: string): Promise<Tweet> {
-    return await this.twitterClient.post<Tweet>("statuses/update", {
-      status: message
+    return await this.twitterClient.post<Tweet>('statuses/update', {
+      status: message,
     });
   }
 }
