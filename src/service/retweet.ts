@@ -49,5 +49,6 @@ export async function retweet(
     logger.info(`Successfully retweeted a tweet with id ${tweetId}`);
   } else {
     logger.error(`Failed to retweet a tweet with id ${tweetId}`);
+    await tweetRepository.markFailed(tweetId);
   }
 }

@@ -22,7 +22,8 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       .find(
         {
           approvedAt: { $exists: true },
-          hasRetweeted: false,
+          retweetedAt: undefined,
+          failedAt: undefined,
         },
       )
       .project({ tweetId: 1 })
@@ -104,7 +105,17 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
     const result = await this.collection
       .updateOne(
         { tweetId },
-        { $set: { hasRetweeted: true } },
+        { $set: { hasRetweeted: true, retweetedAt: (new Date()) } },
+      );
+
+    return result.result.ok === 1;
+  }
+
+  public markFailed = async (tweetId: string): Promise<boolean> => {
+    const result = await this.collection
+      .updateOne(
+        { tweetId },
+        { $set: { failedAt: (new Date()) } },
       );
 
     return result.result.ok === 1;
