@@ -1,3 +1,15 @@
+# v0.2.2 (Thu Mar 18 2021)
+
+#### ⚠️ Pushed to `master`
+
+- ci(conventional-pr): Update access token to use repo-defined access token. ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.2.1 (Sat Mar 13 2021)
 
 #### 🐛 Bug Fix
