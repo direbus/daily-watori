@@ -6,6 +6,7 @@ import { prefix, textChannelName, categoryChannelName, react } from './../../bot
 import { CommandHandler, Context, HandlerFunction, RETWEET } from '../common/types';
 import { Tweet } from '../entity/tweet';
 import { logger } from '../utils/logger';
+import errorToEmbed from './util/errorToEmbed';
 
 /**
  * Core functionality of the bot. Allows users to interact
@@ -130,13 +131,16 @@ export class DallyDoseBot {
     const commandName = (args.shift() as string).toLowerCase();
 
     const handler = this.commands.get(commandName);
-
-    if (handler) {
-      return handler(message, args, this.context);
-    } else {
-      return channel.send(
-        `Command unknown, please refer to \`${prefix}help\` for more information about how to use this bot.`,
-      );
+    try {
+      if (handler) {
+        return handler(message, args, this.context);
+      } else {
+        return channel.send(
+          `Command unknown, please refer to \`${prefix}help\` for more information about how to use this bot.`,
+        );
+      }
+    } catch (e) {
+      return await channel.send("Error while processing command.", errorToEmbed(e));
     }
   }
 
