@@ -9,6 +9,7 @@ export default {
   example: `\`${prefix}clear\``,
   execute: async (
     message: Message,
+    args: string[],
     { tweetRepository }: Context,
   ): Promise<Message> => {
     const { channel } = message;

@@ -10,7 +10,7 @@ export default {
   example: `\`${prefix}list\``,
   execute: async (
     message: Message,
-    _: string[],
+    args: string[],
     { userRepository }: Context,
   ): Promise<Message> => {
     const { channel } = message;

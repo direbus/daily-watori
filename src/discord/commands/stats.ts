@@ -10,7 +10,7 @@ export default {
   example: `\`${prefix}stats\``,
   execute: async (
     message: Message,
-    _: string[],
+    args: string[],
     { twitterRepository }: Context,
   ): Promise<Message> => {
     const { channel } = message;
