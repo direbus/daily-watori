@@ -1,3 +1,15 @@
+# v0.3.0 (Mon Apr 05 2021)
+
+#### 🚀 Enhancement
+
+- Add exhaustion feature for failed retweet attemps [#32](https://github.com/direbus/daily-watori/pull/32) ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.2.2 (Thu Mar 18 2021)
 
 #### ⚠️ Pushed to `master`
