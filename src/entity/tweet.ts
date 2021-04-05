@@ -7,6 +7,8 @@ export interface TweetEntity {
   fetchedAt: Date;
   hasRetweeted: boolean;
   approvedAt?: Date;
+  failedAt?: Date;
+  retweetedAt?: Date;
 }
 
 /**
@@ -21,7 +23,9 @@ export class Tweet {
     public readonly fetchedAt: Date,
     public readonly hasRetweeted: boolean,
     public readonly approvedAt?: Date,
-  ) {}
+    public readonly failedAt?: Date,
+    public readonly retweetedAt?: Date,
+  ) { }
 
   public get url(): string {
     return `https://twitter.com/${this.author}/status/${this.tweetId}`;
@@ -34,6 +38,8 @@ export class Tweet {
       json.fetchedAt,
       json.hasRetweeted,
       json.approvedAt,
+      json.failedAt,
+      json.retweetedAt,
     );
   }
 
