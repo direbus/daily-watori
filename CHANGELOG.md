@@ -1,3 +1,15 @@
+# v0.3.1 (Sat Apr 10 2021)
+
+#### ⚠️ Pushed to `master`
+
+- fix: migration will starts with migration now ([@chez14](https://github.com/chez14))
+
+#### Authors: 1
+
+- Chris Qiang ([@chez14](https://github.com/chez14))
+
+---
+
 # v0.3.0 (Mon Apr 05 2021)
 
 #### 🚀 Enhancement
