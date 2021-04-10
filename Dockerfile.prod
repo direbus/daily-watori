@@ -19,5 +19,4 @@ ENV NODE_ENV development
 RUN npm i
 ENV NODE_ENV production
 
-RUN npm run migration:up 
-CMD npm run start:barebone
+CMD npm run migration:up && npm run start:barebone
