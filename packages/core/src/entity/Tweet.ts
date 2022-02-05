@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { FollowedTwitter } from "./FollowedTwitter";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { FollowedTwitter } from './FollowedTwitter';
 
-@Entity({ name: "tweets" })
+@Entity({ name: 'tweets' })
 export class Tweet {
   @PrimaryGeneratedColumn()
   public id: number;

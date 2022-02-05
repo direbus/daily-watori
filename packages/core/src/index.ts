@@ -2,17 +2,17 @@
 import { default as cors } from '@koa/cors';
 import { default as Koa } from 'koa';
 import { default as koaBody } from 'koa-body';
-import { default as koaHelmet } from "koa-helmet";
-import { default as KoaLogger } from "koa-logger";
-import { default as session } from "koa-session";
-import "reflect-metadata";
-import { createConnection } from "typeorm";
-import connectionConfig from "./util/connection";
-import { appLogger } from "./util/logger";
+import { default as koaHelmet } from 'koa-helmet';
+import { default as KoaLogger } from 'koa-logger';
+import { default as session } from 'koa-session';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import connectionConfig from './util/connection';
+import { appLogger } from './util/logger';
 
-appLogger.info("App starting...");
-createConnection(connectionConfig).then(async connection => {
-  appLogger.info("Database connected.")
+appLogger.info('App starting...');
+createConnection(connectionConfig).then(async () => {
+  appLogger.info('Database connected.');
 
 
   const mainApp = new Koa();
@@ -24,10 +24,10 @@ createConnection(connectionConfig).then(async connection => {
   mainApp.use(KoaLogger());
   mainApp.use(session(mainApp));
 
-  const server = mainApp.listen(process.env.PORT || 3100)
+  const server = mainApp.listen(process.env.PORT || 3100);
 
   if (server) {
-    let addr = server.address();
+    const addr = server.address();
     if (addr instanceof String) {
       appLogger.info(`Server now listens on ${addr}.`);
     } else if (addr instanceof Object) {

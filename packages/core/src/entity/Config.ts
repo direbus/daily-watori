@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity({ name: "config" })
+@Entity({ name: 'config' })
 export class Config {
   @PrimaryColumn()
   id: string;
