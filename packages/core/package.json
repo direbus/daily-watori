@@ -7,20 +7,28 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "dotenv": "^16.0.0",
     "@types/koa": "^2.13.4",
-    "@types/node": "^8.0.29",
+    "@types/node": "^17.0.15",
+    "dotenv": "^16.0.0",
     "ts-node": "3.3.0",
     "typescript": "3.3.3333"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "add": "^2.0.6",
     "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-helmet": "^6.1.0",
+    "koa-logger": "^3.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-session": "^6.2.0",
     "mysql": "^2.14.1",
     "node-cron": "^3.0.0",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.41",
     "winston": "^3.5.1",
-    "winston-daily-rotate-file": "^4.6.0"
+    "winston-daily-rotate-file": "^4.6.0",
+    "yarn": "^1.22.17"
   },
   "scripts": {
     "start": "node --require ts-node/register --experimental-vm-modules -r dotenv/config src/index.ts",
