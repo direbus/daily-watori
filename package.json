@@ -1,17 +1,18 @@
 {
   "name": "daily-watori",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Discord bot that manages and retweets relevant tweets for you",
+  "description": "Bot that manages and retweets relevant tweets for you",
   "main": "build/src/index.js",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "lint": "eslint src/**",
-    "lint:fix": "eslint --fix src/**",
-    "build": "rm -rf ./build && tsc",
-    "start": "pm2 start build/src/index.js --name bot",
-    "start:barebone": "node build/src/index.js",
-    "stop": "pm2 stop bot",
+    "lint": "eslint src/** packages/**",
+    "lint:fix": "eslint --fix src/** packages/**",
+    "build": "yarn workspaces run build",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
     "migration:status": "ts-node node_modules/.bin/migrate-mongo status -f migrate-mongo-config.ts",
@@ -21,7 +22,17 @@
     "release": "auto shipit"
   },
   "keywords": [],
-  "author": "",
+  "maintainers": [
+    {
+      "name": "Chris Qiang",
+      "email": "chris@christianto.net",
+      "url": "https://christianto.net"
+    },
+    {
+      "name": "Namechee",
+      "url": "https://github.com/namchee"
+    }
+  ],
   "license": "ISC",
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
