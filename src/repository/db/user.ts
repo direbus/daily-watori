@@ -21,7 +21,7 @@ export class UserRepository extends MongoRepository<User> {
     return this.collection
       .find()
       .toArray();
-  }
+  };
 
   /**
    * Add a Twitter user to the database, adding it to the watchlist
@@ -34,7 +34,7 @@ export class UserRepository extends MongoRepository<User> {
       .insertOne(user);
 
     return result.result.ok === 1;
-  }
+  };
 
   /**
    * Deletes a user from the database, removing them from the watchlist
@@ -47,7 +47,7 @@ export class UserRepository extends MongoRepository<User> {
       .deleteOne({ name });
 
     return result.result.ok === 1;
-  }
+  };
 
   /**
    * Check whether a user already exist on the database, or the watchlist
@@ -60,5 +60,5 @@ export class UserRepository extends MongoRepository<User> {
       .countDocuments({ name });
 
     return result === 1;
-  }
+  };
 }

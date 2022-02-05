@@ -105,7 +105,7 @@ export class DallyDoseBot {
     });
 
     this.ready = true; // prevents tweet subscription message to be sent when the channel setup has not finished
-  }
+  };
 
   /**
    * Respond when a user sends a message to the server
@@ -138,7 +138,7 @@ export class DallyDoseBot {
         `Command unknown, please refer to \`${prefix}help\` for more information about how to use this bot.`,
       );
     }
-  }
+  };
 
   /**
    * Respond when a reaction is added on tweet notification message
@@ -190,7 +190,7 @@ export class DallyDoseBot {
     }
 
     await message.react('👌');
-  }
+  };
 
   /**
    * Send tweet notification to the news channel,
@@ -241,7 +241,7 @@ export class DallyDoseBot {
         logger.error(`Failed to initialize bot correctly on ${guild.name}`);
       }
     });
-  }
+  };
 
   /**
    * Start the bot with supplied token
@@ -253,5 +253,5 @@ export class DallyDoseBot {
     const usedToken = await this.client.login(token);
 
     return usedToken === token;
-  }
+  };
 }

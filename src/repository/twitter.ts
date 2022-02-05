@@ -37,7 +37,7 @@ export class TwitterRepository {
     query += ` AND since:${format(sinceDate, 'yyyy-MM-dd')}`;
 
     return query;
-  }
+  };
 
   /**
    * Retrieve fresh and relevant tweets from users of interest.
@@ -69,7 +69,7 @@ export class TwitterRepository {
         hasRetweeted: false,
       });
     });
-  }
+  };
 
   /**
    * Retweet a status from relevant accounts
@@ -87,7 +87,7 @@ export class TwitterRepository {
     } catch (e) {
       return false;
     }
-  }
+  };
 
   /**
    * Check if a user exist in Twitter by its username
@@ -106,7 +106,7 @@ export class TwitterRepository {
     } catch {
       return false;
     }
-  }
+  };
 
   /**
    * Get information regarding current authenticated tweet account.
@@ -128,5 +128,5 @@ export class TwitterRepository {
     } catch (e) {
       return null;
     }
-  }
+  };
 }

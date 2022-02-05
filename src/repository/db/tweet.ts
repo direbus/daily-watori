@@ -32,7 +32,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       .toArray();
 
     return result.map(doc => Tweet.fromJSON(doc));
-  }
+  };
 
   /**
    * Insert fresh and relevant tweets into the database.
@@ -60,7 +60,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
 
       return tweets.filter(tweet => !rejectedTweets.includes(tweet.tweetId)); // get all tweets that successfully inserted
     }
-  }
+  };
 
   /**
    * Approve a tweet to be retweeted by official account
@@ -80,7 +80,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       );
 
     return result.result.ok === 1;
-  }
+  };
 
   /**
    * Reject a tweet (a.k.a deletes it from the database)
@@ -93,7 +93,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       .deleteOne({ tweetId });
 
     return result.result.ok === 1;
-  }
+  };
 
   /**
    * Repost a tweet via official account, marking it in the database
@@ -109,7 +109,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       );
 
     return result.result.ok === 1;
-  }
+  };
 
   public markFailed = async (tweetId: string): Promise<boolean> => {
     const result = await this.collection
@@ -119,7 +119,7 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       );
 
     return result.result.ok === 1;
-  }
+  };
 
   /**
    * Deletes all tweets that has been retweeted.
@@ -138,5 +138,5 @@ export class TweetRepository extends MongoRepository<TweetEntity> {
       );
 
     return result.result.ok === 1;
-  }
+  };
 }
