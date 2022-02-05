@@ -15,10 +15,11 @@ services:
       DB_DATABASE: dailywatori
       DB_HOST: db
       PORT: 3100
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229"
     ports:
-      - 9229:9229
+      - 127.0.0.1:9229:9229
       - 3100:3100
-    command: yarn workspace @direbus/dailywatori-core run start -- --inspect=0.0.0.0:9229
+    command: yarn workspace @direbus/dailywatori-core run start
     volumes:
       - "./.infra/storage:/usr/src/app/storage"
 
