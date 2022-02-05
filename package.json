@@ -4,7 +4,6 @@
   "private": true,
   "description": "Bot that manages and retweets relevant tweets for you",
   "main": "build/src/index.js",
-  "type": "module",
   "workspaces": [
     "packages/*"
   ],

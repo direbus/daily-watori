@@ -1,7 +1,10 @@
 {
   "extends": "../../tsconfig",
-  "compilerOptions": {
-    "rootDir": "./",
-    "baseUrl": "./"
-  }
+  "compilerOptions": {},
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

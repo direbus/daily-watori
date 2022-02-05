@@ -1,17 +1,16 @@
+// import * as mount from "koa-mount";
+import { default as cors } from '@koa/cors';
+import { default as Koa } from 'koa';
+import { default as koaBody } from 'koa-body';
+import { default as koaHelmet } from "koa-helmet";
+import { default as KoaLogger } from "koa-logger";
+import { default as session } from "koa-session";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { appLogger } from "./util/logger";
-import * as Koa from 'koa';
 import connectionConfig from "./util/connection";
 
 
-import * as koaHelmet from "koa-helmet";
-import * as KoaLogger from "koa-logger";
-import * as session from "koa-session";
-// import * as mount from "koa-mount";
-
-import * as cors from '@koa/cors';
-import * as koaBody from 'koa-body';
 
 
 appLogger.info("App starting...");
@@ -33,6 +32,8 @@ createConnection(connectionConfig).then(async connection => {
 
   if (server) {
     let addr = server.address();
-    appLogger.info(`Server now listens on ${addr.toString()}.`);
+    appLogger.info(`Server now listens on ${addr?.toString()}.`);
   }
 }).catch(error => console.log(error));
+
+export default null;

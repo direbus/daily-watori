@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     // "incremental": true,
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2020",
+    "module": "CommonJS",
     "lib": [
       "ES2017",
       "ESNext.AsyncIterable",
@@ -15,7 +15,7 @@
     // "declarationMap": true,
     "sourceMap": true,
     // "outFile": "./",
-    "outDir": "./build",
+    // "outDir": "./build",
     "rootDir": "./",
     // "composite": true,
     // "tsBuildInfoFile": "./",

@@ -5,9 +5,11 @@
   "main": "build/src/index.js",
   "license": "ISC",
   "private": true,
-  "type": "module",
   "devDependencies": {
     "@types/koa": "^2.13.4",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-session": "^5.10.4",
+    "@types/koa__cors": "^3.1.1",
     "@types/node": "^17.0.15",
     "dotenv": "^16.0.0"
   },
@@ -29,7 +31,7 @@
     "yarn": "^1.22.17"
   },
   "scripts": {
-    "start": "nodemon --config ../../nodemon.json ./src/index.ts",
+    "start": "nodemon --config ../../nodemon.json ./src/index",
     "prod": "node --experimental-vm-modules build/src/index.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "prebuild": "tsc --build --clean",
