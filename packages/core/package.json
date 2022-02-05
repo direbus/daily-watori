@@ -9,9 +9,7 @@
   "devDependencies": {
     "@types/koa": "^2.13.4",
     "@types/node": "^17.0.15",
-    "dotenv": "^16.0.0",
-    "ts-node": "3.3.0",
-    "typescript": "3.3.3333"
+    "dotenv": "^16.0.0"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
