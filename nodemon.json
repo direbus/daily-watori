@@ -1,13 +1,14 @@
 {
   "verbose": true,
   "execMap": {
-    "ts": "ts-node"
+    "ts": "node --require ts-node/register --experimental-vm-modules",
+    "js": "node --experimental-vm-modules"
   },
   "env": {
     "NODE_ENV": "development"
   },
   "watch": [
-    "src/**/*.ts"
+    "packages/**/*.ts"
   ],
   "ext": "ts,js,json"
 }
