@@ -1,37 +1,42 @@
 version: "3.4"
 
 services:
-  app:
-    image: dally-dose
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+  backend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: backend
     links:
-      - "mongo:mongo"
-    env_file: .env
-    volumes:
-      - "./:/usr/src/app"
+      - db
+    env_file:
+      - .env
+    environment:
+      DB_PASSWORD: no-password
+      DB_USER: root
+      DB_HOST: db
+      PORT: 3100
     ports:
       - 9229:9229
-    command: npm run dev -- --inspect=0.0.0.0:9229
-
-  mongo:
-    image: mongo:latest
-    env_file: .env
-    restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+      - 3100:3100
+    command: yarn workspace @direbus/dailywatori-core run start -- --inspect=0.0.0.0:9229
     volumes:
-      - ./.infra/db:/data/db
+      - "./.infra/storage:/usr/src/app/storage"
 
-  mongo-express:
-    image: mongo-express
-    links:
-      - "mongo:mongo"
-    env_file: .env
-    ports:
-      - 8081:8081
+  db:
+    extends:
+      file: ./docker-compose.base.yml
+      service: db
     environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=${DB_USERNAME}
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: no-password
+    volumes:
+      - "./.infra/db:/var/lib/mysql"
+
+  phpmyadmin:
+    image: phpmyadmin
+    links:
+      - db
+    ports:
+      - 8000:80
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: no-password
