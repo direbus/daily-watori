@@ -1,0 +1,32 @@
+{
+  "name": "@direbus/dailywatori-core",
+  "version": "2.0.0",
+  "description": "Daily ワトリ Main System: Cronjob for running Tweet includer, Tweet Retweets, Notifier and Frontend controller.",
+  "main": "build/src/index.js",
+  "license": "ISC",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "@types/koa": "^2.13.4",
+    "@types/node": "^8.0.29",
+    "ts-node": "3.3.0",
+    "typescript": "3.3.3333"
+  },
+  "dependencies": {
+    "koa": "^2.13.4",
+    "mysql": "^2.14.1",
+    "node-cron": "^3.0.0",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.41",
+    "winston": "^3.5.1",
+    "winston-daily-rotate-file": "^4.6.0"
+  },
+  "scripts": {
+    "start": "node --require ts-node/register --experimental-vm-modules -r dotenv/config src/index.ts",
+    "prod": "node --experimental-vm-modules build/src/index.ts",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "prebuild": "tsc --build --clean",
+    "build": "tsc"
+  }
+}
