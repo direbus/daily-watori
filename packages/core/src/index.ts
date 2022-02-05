@@ -7,14 +7,10 @@ import { default as KoaLogger } from "koa-logger";
 import { default as session } from "koa-session";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { appLogger } from "./util/logger";
 import connectionConfig from "./util/connection";
-
-
-
+import { appLogger } from "./util/logger";
 
 appLogger.info("App starting...");
-
 createConnection(connectionConfig).then(async connection => {
   appLogger.info("Database connected.")
 
@@ -32,7 +28,11 @@ createConnection(connectionConfig).then(async connection => {
 
   if (server) {
     let addr = server.address();
-    appLogger.info(`Server now listens on ${addr?.toString()}.`);
+    if (addr instanceof String) {
+      appLogger.info(`Server now listens on ${addr}.`);
+    } else if (addr instanceof Object) {
+      appLogger.info(`Server now listens on ${addr.address.toString()}:${addr.port}.`);
+    }
   }
 }).catch(error => console.log(error));
 
