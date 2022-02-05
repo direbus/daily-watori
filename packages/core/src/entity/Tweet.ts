@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { FollowedTwitter } from "./FollowedTwitter";
 
 @Entity({ name: "tweets" })
@@ -9,7 +9,7 @@ export class Tweet {
   @Column()
   public tweetId: string;
 
-  @Column()
+  @OneToMany(() => FollowedTwitter, author => author.tweets)
   public author: FollowedTwitter;
 
   @Column()

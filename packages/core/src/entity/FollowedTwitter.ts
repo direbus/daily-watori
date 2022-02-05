@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Tweet } from "./Tweet";
 
 @Entity({ name: "followed_twitter" })
 export class FollowedTwitter {
@@ -13,4 +14,7 @@ export class FollowedTwitter {
 
   @Column()
   deletedOn: Date;
+
+  @ManyToOne(() => Tweet, tweet => tweet.author)
+  tweets: Tweet[];
 }
