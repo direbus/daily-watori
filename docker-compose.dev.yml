@@ -11,7 +11,8 @@ services:
       - .env
     environment:
       DB_PASSWORD: no-password
-      DB_USER: root
+      DB_USERNAME: root
+      DB_DATABASE: dailywatori
       DB_HOST: db
       PORT: 3100
     ports:
@@ -27,6 +28,7 @@ services:
       service: db
     environment:
       MYSQL_ROOT_PASSWORD: no-password
+      MYSQL_DATABASE: dailywatori
     volumes:
       - "./.infra/db:/var/lib/mysql"
 
