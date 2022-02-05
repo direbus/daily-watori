@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "lint": "eslint src/** packages/**",
-    "lint:fix": "eslint --fix src/** packages/**",
+    "lint": "eslint packages/**",
+    "lint:fix": "eslint --fix packages/**",
     "build": "yarn workspaces run build",
     "postuninstall": "npm prune",
     "migration:create": "sh -c 'ts-node node_modules/.bin/migrate-mongo create $0 -f migrate-mongo-config.ts' ",
