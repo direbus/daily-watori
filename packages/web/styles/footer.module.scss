@@ -4,12 +4,17 @@
   background-color: $gray-200;
   color: $gray-700;
   
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding: 2rem 0rem;
   
   :global .nav-link {
     color: $gray-700;
     padding-left: 0rem;
     padding-right: 0rem;
   }
+}
+
+.footerSub {
+  background-color: $gray-400;
+  color: $gray-600;
+  padding: 1rem 0rem;
 }
