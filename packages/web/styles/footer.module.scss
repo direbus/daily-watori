@@ -1,0 +1,15 @@
+@import "variables";
+
+.footer {
+  background-color: $gray-200;
+  color: $gray-700;
+  
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  
+  :global .nav-link {
+    color: $gray-700;
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+}
