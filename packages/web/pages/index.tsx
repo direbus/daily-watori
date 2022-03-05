@@ -17,16 +17,16 @@ const Home: NextPage = () => {
       <div className={classNames("bg-info", styles.sectionBanner)}>
         <Container>
           <h1 className="display-3">Follow Us on Twitter!</h1>
-          <a className="h1 text-dark" href='https://twitter.com/daily_watori'><FontAwesomeIcon icon={faTwitter} /> @daily_watori</a>
+          <a className="h1 text-dark" href='https://twitter.com/daily_watori' target="_blank" rel="noopener"><FontAwesomeIcon icon={faTwitter} /> @daily_watori</a>
         </Container>
       </div>
 
       <div className={classNames(styles.sectionBanner)}>
         <Container>
-          <h1 className="display-3">Nominate Your Favorite Artist!</h1>
-          <h2 className="h1">Add them to our watchlist!</h2>
+          <h1 className="display-3">Nominate Your Favorite Artists!</h1>
+          <h2 className="h1">Add them to our watchlist.</h2>
           
-          <Link href="https://github.com/direbus/daily-watori" passHref><Button size='lg' variant="outline-primary"> Request to Include to Retweet List</Button></Link>
+          <Link href="/request/add-author" passHref><Button size='lg' variant="outline-primary"> Request to Include to Retweet List</Button></Link>
         </Container>
       </div>
 
@@ -34,9 +34,9 @@ const Home: NextPage = () => {
         <Container>
           <h1 className="display-3">Who's behind the scene?</h1>
           <h2 className="h1">See Our Contributors</h2>
-          <Button size='lg' variant="outline-dark" href="https://github.com/direbus/daily-watori/graphs/contributors"><FontAwesomeIcon icon={faGithub} /> direbus/daily-watori's Contributor</Button>
+          <Button size='lg' variant="outline-dark" href="https://github.com/direbus/daily-watori/graphs/contributors" target="_blank" rel="noopener"><FontAwesomeIcon icon={faGithub} /> direbus/daily-watori's Contributor</Button>
           <h2 className="h1 mt-4">See Our Codebase</h2>
-          <Button size='lg' variant="outline-dark" href="https://github.com/direbus/daily-watori"><FontAwesomeIcon icon={faCodeFork} /> direbus/daily-watori</Button>
+          <Button size='lg' variant="outline-dark" href="https://github.com/direbus/daily-watori" target="_blank" rel="noopener"><FontAwesomeIcon icon={faCodeFork} /> direbus/daily-watori</Button>
         </Container>
       </div>
     </>

@@ -18,8 +18,8 @@ function AppFooter() {
 
             <div className="my-3 mt-4">
               <Nav className="flex-column">
-                <Nav.Link href="https://twitter.com/daily_watori"><FontAwesomeIcon icon={faTwitter} size="lg" /> daily_watori</Nav.Link>
-                <Nav.Link href="https://github.com/direbus/daily-watori"><FontAwesomeIcon icon={faGithub} size="lg" /> direbus/daily-watori</Nav.Link>
+                <Nav.Link href="https://twitter.com/daily_watori" target="_blank" rel="noopener"><FontAwesomeIcon icon={faTwitter} size="lg" /> daily_watori</Nav.Link>
+                <Nav.Link href="https://github.com/direbus/daily-watori" target="_blank" rel="noopener"><FontAwesomeIcon icon={faGithub} size="lg" /> direbus/daily-watori</Nav.Link>
               </Nav>
             </div>
 
@@ -29,14 +29,14 @@ function AppFooter() {
             <div className="my-3">
               <strong>Marmod</strong>
               <Nav className="flex-column">
-                <Nav.Link href="https://twitter.com/heychez14"><FontAwesomeIcon icon={faTwitter} size="lg" /> heychez14</Nav.Link>
+                <Nav.Link href="https://twitter.com/heychez14" target="_blank" rel="noopener"><FontAwesomeIcon icon={faTwitter} size="lg" /> heychez14</Nav.Link>
               </Nav>
             </div>
             <div className="my-3">
               <strong>Core Dev</strong>
               <Nav className="flex-column">
-                <Nav.Link href="https://github.com/chez14"><FontAwesomeIcon icon={faGithub} size="lg" /> chez14</Nav.Link>
-                <Nav.Link href="https://github.com/namchee"><FontAwesomeIcon icon={faGithub} size="lg" /> namchee</Nav.Link>
+                <Nav.Link href="https://github.com/chez14" target="_blank" rel="noopener"><FontAwesomeIcon icon={faGithub} size="lg" /> chez14</Nav.Link>
+                <Nav.Link href="https://github.com/namchee" target="_blank" rel="noopener"><FontAwesomeIcon icon={faGithub} size="lg" /> namchee</Nav.Link>
               </Nav>
             </div>
           </Col>
@@ -45,16 +45,16 @@ function AppFooter() {
             <div className="my-3">
               <strong>World Trigger Resources</strong>
               <Nav className="flex-column">
-                <Nav.Link href="https://www.toei-anim.co.jp/tv/wt/wt01/">Toei Page</Nav.Link>
-                <Nav.Link href="https://worldtrigger.info/index.php">World Trigger Info</Nav.Link>
-                <Nav.Link href="https://worldtrigger.fandom.com/wiki/Main_Page">World Trigger Wikia</Nav.Link>
-                <Nav.Link href="https://en.wikipedia.org/wiki/World_Trigger">Wikipedia</Nav.Link>
+                <Nav.Link href="https://www.toei-anim.co.jp/tv/wt/wt01/" target="_blank" rel="noopener">Toei Page</Nav.Link>
+                <Nav.Link href="https://worldtrigger.info/index.php" target="_blank" rel="noopener">World Trigger Info</Nav.Link>
+                <Nav.Link href="https://worldtrigger.fandom.com/wiki/Main_Page" target="_blank" rel="noopener">World Trigger Wikia</Nav.Link>
+                <Nav.Link href="https://en.wikipedia.org/wiki/World_Trigger" target="_blank" rel="noopener">Wikipedia</Nav.Link>
               </Nav>
             </div>
           </Col>
           <Col xs={6} md={3}>
             <div className="my-3">
-              <strong>Daily Watori Legals</strong>
+              <strong>Daily Watori Resources</strong>
               <Nav className="flex-column">
                 <Link href="/legal/privacy-policy" passHref><Nav.Link>Privacy Policy</Nav.Link></Link>
                 <Link href="/legal/terms-of-service" passHref><Nav.Link>Terms of Service</Nav.Link></Link>
