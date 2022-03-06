@@ -66,7 +66,14 @@ function AppFooter() {
     </footer>
     <footer className={styles.footerSub}>
       <Container>
-        <p className='m-0 small fw-bold'>&copy;2021-{(new Date()).getFullYear()} Daily Watori Team; Built on #commit-hash# at #time#.</p>
+        <Row>
+          <Col>
+            <p className='m-0 small fw-bold'>&copy;2021-{(new Date()).getFullYear()} Daily Watori Team.</p>
+          </Col>
+          <Col>
+            <p className='m-0 small text-end'><strong>{process.env.BUILD_VER}</strong> Built on {process.env.BUILD_GIT_HASH} at {process.env.BUILD_DATE}.</p>
+          </Col>
+        </Row>
       </Container>
     </footer>
   </>
