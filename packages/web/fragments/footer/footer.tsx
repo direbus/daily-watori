@@ -12,7 +12,7 @@ function AppFooter() {
     <footer className={styles.footer}>
       <Container>
         <Row>
-          <Col xs={6} md={3}>
+          <Col xs={10} md={3}>
             <Link href="/"><a className="h2 text-decoration-none text-dark">Daily <ruby>ワトリ<rp>(</rp><rt>Watori</rt><rp>)</rp></ruby></a></Link>
             <p className='small'>Daily Fan Posts of World Trigger contents to bless your timeline.</p>
 
@@ -67,11 +67,11 @@ function AppFooter() {
     <footer className={styles.footerSub}>
       <Container>
         <Row>
-          <Col>
-            <p className='m-0 small fw-bold'>&copy;2021-{(new Date()).getFullYear()} Daily Watori Team.</p>
+          <Col xs={12} md={6}>
+            <p className='my-2 small fw-bold'>&copy;2021-{(new Date()).getFullYear()} Daily Watori Team.</p>
           </Col>
-          <Col>
-            <p className='m-0 small text-end'><strong>{process.env.BUILD_VER}</strong> Built on {process.env.BUILD_GIT_HASH} at {process.env.BUILD_DATE}.</p>
+          <Col xs={12} md={6}>
+            <p className='my-2 small text-md-end'><strong>{process.env.BUILD_VER}</strong> Built on {process.env.BUILD_GIT_HASH} at {process.env.BUILD_DATE}.</p>
           </Col>
         </Row>
       </Container>

@@ -19,7 +19,7 @@ function DashboardIndex() {
           <section className={styles.section}>
             <h1>Dashboard</h1>
             <Row className={classNames('align-items-stretch', styles.sectionCardStatusser)}>
-              <Col xs={4} md={3}>
+              <Col className="my-2" md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Pending Post Review</Card.Title>
@@ -37,7 +37,7 @@ function DashboardIndex() {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col xs={4} md={3}>
+              <Col className="my-2" md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Pending Artist Review</Card.Title>
@@ -46,7 +46,7 @@ function DashboardIndex() {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col xs={4} md={3}>
+              <Col className="my-2" md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Appv. Post In Queue</Card.Title>
@@ -55,7 +55,7 @@ function DashboardIndex() {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col xs={4} md={3}>
+              <Col className="my-2" md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Last Publish</Card.Title>
@@ -75,7 +75,7 @@ function DashboardIndex() {
             <h2>Posts</h2>
             <div className='bg-dark p-5 text-white'>Graphic of Fetched Post, Approved vs Rejected</div>
           </section>
-          
+
           <section className={styles.section}>
             <h2>Post Moderation Rate</h2>
             <div className='bg-dark p-5 text-white'>Graphic of Fetched Post</div>
