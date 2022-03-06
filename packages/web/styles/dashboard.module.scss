@@ -1,0 +1,20 @@
+.section {
+  margin: 3rem 0rem;
+}
+
+.sectionCardStatusser {
+  :global {
+    .card {
+      height: 100%;
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-stats {
+        flex-grow: 1;
+      }
+    }
+  }
+}
